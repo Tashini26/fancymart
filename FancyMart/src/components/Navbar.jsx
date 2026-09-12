@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import { CartContext } from '../context/CartContext';
 import {
   AppBar,
   Toolbar,
@@ -12,12 +13,14 @@ import {
   Menu,
   MenuItem,
   useMediaQuery,
-  useTheme
+  useTheme,
+  Badge
 } from '@mui/material';
-import { ShoppingBag, AccountCircle, Menu as MenuIcon, Logout } from '@mui/icons-material';
+import { ShoppingBag, AccountCircle, Menu as MenuIcon, Logout, ShoppingCart } from '@mui/icons-material';
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
+  const { cartItemCount } = useContext(CartContext);
   const navigate = useNavigate();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -141,6 +144,11 @@ const Navbar = () => {
 
           {/* Auth Actions */}
           <Box sx={{ flexGrow: 0, display: 'flex', alignItems: 'center', gap: 2 }}>
+            <IconButton component={Link} to="/cart" color="inherit" aria-label="cart">
+              <Badge badgeContent={cartItemCount} color="error" showZero={false}>
+                <ShoppingCart sx={{ color: 'text.secondary' }} />
+              </Badge>
+            </IconButton>
             {user ? (
               <>
                 <Button 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Products from './pages/Products';
@@ -9,6 +10,10 @@ import Contactus from './pages/Contactus';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Profile from './pages/Profile';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import ProductDetails from './pages/ProductDetails';
+
 import './index.css';
 
 import { ThemeProvider } from '@mui/material/styles';
@@ -18,8 +23,9 @@ import theme from './theme';
 function App() {
   return (
     <AuthProvider>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+      <CartProvider>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
         <Router>
           <div className="app">
             <Navbar />
@@ -32,11 +38,15 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/product/:id" element={<ProductDetails />} />
               </Routes>
             </main>
           </div>
         </Router>
-      </ThemeProvider>
+        </ThemeProvider>
+      </CartProvider>
     </AuthProvider>
   );
 }

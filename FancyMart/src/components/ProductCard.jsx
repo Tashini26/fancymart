@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Card, Typography, Box, IconButton, Button } from '@mui/material';
 import { ShoppingCartOutlined as ShoppingCartIcon } from '@mui/icons-material';
+import { CartContext } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const ProductCard = ({ product, onBuyNow }) => {
+  const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
   return (
     <Card 
       elevation={0} 
+      onClick={() => navigate(`/product/${product.id}`, { state: { product } })}
       sx={{ 
         width: 273,
         height: 310,
@@ -49,7 +54,7 @@ const ProductCard = ({ product, onBuyNow }) => {
         className="buy-button"
         onClick={(e) => {
           e.stopPropagation();
-          onBuyNow(product);
+          addToCart(product);
         }}
         sx={{
           position: 'absolute',
@@ -147,7 +152,7 @@ const ProductCard = ({ product, onBuyNow }) => {
         color="primary"
         onClick={(e) => {
           e.stopPropagation();
-          onBuyNow(product);
+          navigate('/checkout', { state: { product } });
         }}
         sx={{
           position: 'absolute',
