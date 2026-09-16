@@ -12,7 +12,7 @@ import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
-import ProductDetails from './pages/ProductDetails';
+
 
 import './index.css';
 
@@ -40,7 +40,7 @@ function App() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />
-                <Route path="/product/:id" element={<ProductDetails />} />
+
               </Routes>
             </main>
           </div>
