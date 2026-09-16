@@ -24,6 +24,15 @@ const theme = createTheme({
       main: '#ef4444',
     },
   },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 800, // Reduced from 900px to support 1024px laptops with 125% display scaling
+      lg: 1200,
+      xl: 1536,
+    },
+  },
   typography: {
     fontFamily: '"Poppins", "Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {

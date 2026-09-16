@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Box,
@@ -8,77 +8,217 @@ import {
   Grid,
   Card,
   CardContent,
-  Avatar
+  Avatar,
+  Rating,
+  Snackbar,
+  Alert
 } from '@mui/material';
+import { DUMMY_PRODUCTS, BRANDS } from '../data/products';
+import ProductCard from '../components/ProductCard';
+import Checkout from './Checkout';
+import heroImage from '../assets/Product/hro.webp';
+
+// Testimonial Data (using placeholders)
+const TESTIMONIALS = [
+  { id: 1, name: 'Sarah M.', review: 'Absolutely love the Nivea Face Wash! My skin has never felt so clear.', rating: 5, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&q=80' },
+  { id: 2, name: 'Jessica K.', review: 'The Aloe Vera Moisturizer is a game changer for dry skin.', rating: 5, avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&q=80' },
+  { id: 3, name: 'Michael B.', review: 'Fast shipping and authentic products. Highly recommend FancyMart.', rating: 4, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&q=80' },
+];
 
 const Home = () => {
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+  const handleBuyNow = (product) => {
+    setSelectedProduct(product);
+  };
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
+
+  // Derive products from dummy data
+  const topSelling = DUMMY_PRODUCTS.slice(0, 3);
+  const topRated = [...DUMMY_PRODUCTS].sort((a, b) => b.rating - a.rating).slice(0, 3);
+
+  // Repeat brands to create a seamless infinite loop
+  const loopingBrands = [...BRANDS, ...BRANDS, ...BRANDS, ...BRANDS];
+
   return (
-    <Box className="animate-fade-in">
+    <Box className="animate-fade-in" sx={{ pb: 8 }}>
       {/* Hero Section */}
       <Box 
         sx={{ 
-          bgcolor: 'primary.main', 
-          color: 'primary.contrastText', 
-          py: { xs: 8, md: 12 }, 
+          display: 'flex', 
+          mb: 8, 
+          backgroundImage: `url(${heroImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          minHeight: { xs: '300px', md: '500px' },
           borderRadius: { xs: 0, md: '0 0 32px 32px' },
-          mb: 8,
-          textAlign: { xs: 'center', md: 'left' }
+          overflow: 'hidden',
+          position: 'relative',
         }}
       >
-        <Container maxWidth="lg">
-          <Grid container spacing={4} alignItems="center">
-            <Grid item xs={12} md={8}>
-              <Typography variant="h2" component="h1" fontWeight="bold" gutterBottom>
-                Welcome to FancyMart
+        {/* Overlay for text readability */}
+        <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, bgcolor: 'rgba(255, 255, 255, 0.4)' }} />
+        
+        <Box sx={{ p: { xs: 3, md: 6, lg: 8 }, display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: '800px', zIndex: 1 }}>
+          <Typography variant="h2" component="h1" fontWeight="bold" sx={{ color: '#134e2c', lineHeight: 1.2, fontSize: { xs: '2.5rem', md: '4.5rem' } }}>
+            Glow Every Day
+          </Typography>
+          <Typography variant="h5" sx={{ color: '#333', mb: 4, mt: 2, maxWidth: '600px', fontWeight: 600 }}>
+            Discover our curated collection of premium beauty creams and skincare essentials. Your journey to flawless skin starts here.
+          </Typography>
+          <Box>
+            <Button 
+              component={RouterLink} 
+              to="/products" 
+              variant="contained" 
+              size="large"
+              sx={{ py: 1.5, px: 4, fontSize: '1.1rem', bgcolor: '#134e2c', '&:hover': { bgcolor: '#0f3d23' }, borderRadius: 2 }}
+            >
+              Shop the Collection
+            </Button>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Brand Marquee (Infinite Loop) */}
+      <Container maxWidth="xl" sx={{ mb: 10, overflow: 'hidden' }}>
+        <Typography variant="subtitle1" align="center" color="text.secondary" gutterBottom sx={{ mb: 3, textTransform: 'uppercase', letterSpacing: 2, fontWeight: 'bold' }}>
+          Trusted Brands
+        </Typography>
+        <Box 
+          sx={{
+            display: 'flex',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            position: 'relative',
+            // Fade effect on edges
+            '&::before, &::after': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              width: '100px',
+              height: '100%',
+              zIndex: 2,
+            },
+            '&::before': {
+              left: 0,
+              background: 'linear-gradient(to right, #f8fafc, transparent)',
+            },
+            '&::after': {
+              right: 0,
+              background: 'linear-gradient(to left, #f8fafc, transparent)',
+            }
+          }}
+        >
+          <Box 
+            sx={{
+              display: 'inline-flex',
+              animation: 'scroll 15s linear infinite',
+              gap: 10,
+              pr: 10, // Must match gap for seamless loop
+            }}
+          >
+            {loopingBrands.map((brand, idx) => (
+              <Typography key={idx} variant="h4" fontWeight="bold" color="#cbd5e1" sx={{ minWidth: 'max-content' }}>
+                {brand}
               </Typography>
-              <Typography variant="h5" sx={{ opacity: 0.9, mb: 4, maxWidth: '600px' }}>
-                Discover premium products with unmatched quality and style. Your ultimate shopping destination.
-              </Typography>
-              <Button 
-                component={RouterLink} 
-                to="/products" 
-                variant="contained" 
-                color="secondary"
-                size="large"
-                sx={{ py: 1.5, px: 4, fontSize: '1.1rem' }}
-              >
-                Shop Now
-              </Button>
-            </Grid>
-          </Grid>
+            ))}
+          </Box>
+        </Box>
+      </Container>
+
+      {/* Top Selling Products */}
+      <Container maxWidth="lg" sx={{ mb: 10 }}>
+        <Typography variant="h3" align="center" fontWeight="bold" gutterBottom sx={{ mb: 6 }}>
+          Top Selling
+        </Typography>
+        {/* We use flex-wrap here similar to Products.jsx to center cards securely */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            columnGap: { xs: '16px', sm: '20px', md: '24px' },
+            rowGap: { xs: '16px', sm: '20px', md: '24px' },
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            alignContent: 'flex-start',
+          }}
+        >
+          {topSelling.map(product => (
+            <ProductCard key={product.id} product={product} onBuyNow={handleBuyNow} />
+          ))}
+        </Box>
+      </Container>
+
+      {/* Hot Deal Banner */}
+      <Box sx={{ bgcolor: 'secondary.main', color: 'secondary.contrastText', py: { xs: 6, md: 10 }, mb: 10, textAlign: 'center' }}>
+        <Container maxWidth="md">
+          <Typography variant="h3" fontWeight="bold" gutterBottom sx={{ fontSize: { xs: '2rem', md: '3rem' } }}>
+            Special Hot Deal! 🔥
+          </Typography>
+          <Typography variant="h6" sx={{ opacity: 0.9, mb: 4, fontSize: { xs: '1rem', md: '1.25rem' } }}>
+            Get up to 50% off on all selected Nature's Secret products. Limited time offer!
+          </Typography>
+          <Button 
+            component={RouterLink} 
+            to="/products" 
+            variant="contained" 
+            color="primary"
+            size="large"
+            sx={{ py: 1.5, px: 6, fontSize: '1.2rem', borderRadius: 8, boxShadow: 4 }}
+          >
+            Grab the Deal
+          </Button>
         </Container>
       </Box>
 
-      {/* Featured Categories */}
-      <Container maxWidth="lg" sx={{ mb: 8 }}>
+      {/* Top Rated Products */}
+      <Container maxWidth="lg" sx={{ mb: 10 }}>
         <Typography variant="h3" align="center" fontWeight="bold" gutterBottom sx={{ mb: 6 }}>
-          Featured Categories
+          Top Rated
         </Typography>
-        
-        <Grid container spacing={4}>
-          {[1, 2, 3].map((item) => (
-            <Grid item xs={12} sm={6} md={4} key={item}>
-              <Card elevation={2} sx={{ height: '100%', textAlign: 'center', p: 3, transition: 'transform 0.2s', '&:hover': { transform: 'translateY(-4px)' } }}>
-                <CardContent>
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            columnGap: { xs: '16px', sm: '20px', md: '24px' },
+            rowGap: { xs: '16px', sm: '20px', md: '24px' },
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            alignContent: 'flex-start',
+          }}
+        >
+          {topRated.map(product => (
+            <ProductCard key={product.id} product={product} onBuyNow={handleBuyNow} />
+          ))}
+        </Box>
+      </Container>
+
+      {/* Customer Testimonials */}
+      <Container maxWidth="lg">
+        <Typography variant="h3" align="center" fontWeight="bold" gutterBottom sx={{ mb: 6 }}>
+          What Our Customers Say
+        </Typography>
+        <Grid container spacing={4} justifyContent="center">
+          {TESTIMONIALS.map(testimonial => (
+            <Grid item xs={12} sm={6} md={4} key={testimonial.id}>
+              <Card elevation={2} sx={{ height: '100%', borderRadius: 4, p: 2, display: 'flex', flexDirection: 'column' }}>
+                <CardContent sx={{ textAlign: 'center', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                   <Avatar 
-                    sx={{ 
-                      width: 80, 
-                      height: 80, 
-                      bgcolor: 'background.default', 
-                      color: 'primary.main', 
-                      fontSize: '2rem', 
-                      fontWeight: 'bold',
-                      margin: '0 auto',
-                      mb: 2
-                    }}
-                  >
-                    {item}
-                  </Avatar>
-                  <Typography variant="h5" component="h3" gutterBottom fontWeight="bold">
-                    Category {item}
+                    src={testimonial.avatar} 
+                    alt={testimonial.name} 
+                    sx={{ width: 80, height: 80, mx: 'auto', mb: 2, border: '3px solid #f0f0f0' }} 
+                  />
+                  <Rating value={testimonial.rating} readOnly sx={{ mb: 2, mx: 'auto' }} />
+                  <Typography variant="body1" color="text.secondary" sx={{ fontStyle: 'italic', mb: 3, flexGrow: 1 }}>
+                    "{testimonial.review}"
                   </Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    Explore our latest collection of premium items carefully curated just for you.
+                  <Typography variant="subtitle1" fontWeight="bold" color="primary.main">
+                    {testimonial.name}
                   </Typography>
                 </CardContent>
               </Card>
@@ -86,6 +226,34 @@ const Home = () => {
           ))}
         </Grid>
       </Container>
+
+      {/* Checkout Modal & Snackbar */}
+      <Snackbar 
+        open={snackbarOpen} 
+        autoHideDuration={3000} 
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%', fontWeight: 'bold' }}>
+          {selectedProduct?.name} added to cart!
+        </Alert>
+      </Snackbar>
+
+      {selectedProduct && (
+        <Checkout product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+      )}
+      
+      {/* Global styles for animation */}
+      <style>
+        {`
+          @keyframes scroll {
+            0% { transform: translateX(0); }
+            /* The translation distance depends on the number of original items vs duplicates */
+            /* Assuming we want to shift precisely one block of BRANDS */
+            100% { transform: translateX(calc(-100% / 4)); }
+          }
+        `}
+      </style>
     </Box>
   );
 };

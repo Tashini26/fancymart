@@ -3,7 +3,6 @@ import {
   Container, 
   Typography, 
   Box, 
-  Grid,
   Snackbar,
   Alert,
   FormGroup,
@@ -13,121 +12,105 @@ import {
   IconButton,
   RadioGroup,
   Radio,
-  Slider
+  Slider,
+  Drawer,
+  Button,
 } from '@mui/material';
-import { Remove as RemoveIcon, Add as AddIcon } from '@mui/icons-material';
+import { Remove as RemoveIcon, Add as AddIcon, Tune as TuneIcon, Close as CloseIcon } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import heroImage from '../assets/Product/hro.webp';
+import Checkout from './Checkout';
 
-// Updated Dummy Product Data for Beauty/Skincare to match the new filters
-const DUMMY_PRODUCTS = [
-  {
-    id: 1,
-    name: 'Nivea Purifying Face Wash',
-    price: 850.00,
-    discountPrice: 700.00,
-    image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&q=80',
-    company: 'Nivea',
-    category: 'Face Wash',
-    rating: 4.5
-  },
-  {
-    id: 2,
-    name: 'Nature\'s Secret Aloe Vera Moisturizer',
-    price: 1200.00,
-    discountPrice: null,
-    image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=500&q=80',
-    company: 'Nature\'s Secret',
-    category: 'Moisturizer',
-    rating: 4.8
-  },
-  {
-    id: 3,
-    name: 'Bellos Deep Clean Shampoo',
-    price: 950.00,
-    discountPrice: 800.00,
-    image: 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&q=80',
-    company: 'Bellos',
-    category: 'Shampoo',
-    rating: 4.2
-  },
-  {
-    id: 4,
-    name: 'Unilever Repair & Protect Conditioner',
-    price: 950.00,
-    discountPrice: null,
-    image: 'https://images.unsplash.com/photo-1526947425960-945c6e72858f?w=500&q=80',
-    company: 'Unilever',
-    category: 'Conditioner',
-    rating: 4.6
-  },
-  {
-    id: 5,
-    name: 'Nivea Intensive Body Wash',
-    price: 1100.00,
-    discountPrice: 950.00,
-    image: 'https://images.unsplash.com/photo-1616683693504-3ea7e9ad6fec?w=500&q=80',
-    company: 'Nivea',
-    category: 'Body Wash',
-    rating: 4.7
-  },
-  {
-    id: 6,
-    name: 'Nature\'s Secret Heel Repair Footcare',
-    price: 650.00,
-    discountPrice: 500.00,
-    image: 'https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=500&q=80',
-    company: 'Nature\'s Secret',
-    category: 'Footcare',
-    rating: 4.9
-  }
-];
+import { DUMMY_PRODUCTS, BRANDS, CATEGORIES } from '../data/products';
 
-const BRANDS = ['Nature\'s Secret', 'Bellos', 'Nivea', 'Unilever'];
-const CATEGORIES = ['Face Wash', 'Shampoo', 'Conditioner', 'Moisturizer', 'Footcare', 'Skincare', 'Body Wash'];
-
-const SidebarFilterGroup = ({ title, options = [], selected = [], onChange = () => {}, defaultExpanded = false, children }) => {
+/* ── Collapsible filter section — organized card style ── */
+const SidebarFilterGroup = ({ title, icon, options = [], selected = [], onChange = () => {}, defaultExpanded = false, children }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
 
   return (
-    <Box sx={{ mb: 1 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={() => setExpanded(!expanded)}>
-        {options.length > 0 && (
-          <Checkbox 
-            checked={options.some(opt => selected.includes(opt))}
-            indeterminate={options.some(opt => selected.includes(opt)) && !options.every(opt => selected.includes(opt))}
-            onChange={(e) => {
-              e.stopPropagation();
-              if (e.target.checked) {
-                const toAdd = options.filter(opt => !selected.includes(opt));
-                toAdd.forEach(opt => onChange(opt));
-              } else {
-                options.filter(opt => selected.includes(opt)).forEach(opt => onChange(opt));
-              }
-            }}
-            sx={{ color: '#ccc', '&.Mui-checked': { color: '#00c853' }, '&.MuiCheckbox-indeterminate': { color: '#00c853' } }}
-          />
-        )}
-        <Typography sx={{ flexGrow: 1, fontSize: '0.9rem', color: '#555', fontWeight: options.length === 0 ? 'bold' : 'normal' }}>{title}</Typography>
-        <IconButton size="small" sx={{ color: '#00c853' }}>
-          {expanded ? <RemoveIcon fontSize="small" /> : <AddIcon fontSize="small" />}
-        </IconButton>
+    <Box
+      sx={{
+        mb: '10px',
+        bgcolor: '#fff',
+        borderRadius: '10px',
+        border: '1px solid #f0f0f0',
+        overflow: 'hidden',
+        boxShadow: '0 1px 4px rgba(0,0,0,0.05)',
+      }}
+    >
+      {/* Section header */}
+      <Box
+        onClick={() => setExpanded(!expanded)}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          px: '14px',
+          py: '10px',
+          bgcolor: expanded ? 'rgba(0,200,83,0.06)' : '#fafafa',
+          cursor: 'pointer',
+          borderBottom: expanded ? '1px solid #f0f0f0' : 'none',
+          transition: 'background 0.2s',
+          '&:hover': { bgcolor: 'rgba(0,200,83,0.08)' },
+        }}
+      >
+
+        <Typography
+          sx={{
+            flexGrow: 1,
+            fontSize: '0.82rem',
+            fontWeight: 700,
+            color: '#1a2b4c',
+            textTransform: 'uppercase',
+            letterSpacing: 0.6,
+          }}
+        >
+          {title}
+        </Typography>
+        <Box
+          sx={{
+            width: 22, height: 22,
+            borderRadius: '50%',
+            bgcolor: expanded ? '#00c853' : '#eee',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            transition: 'all 0.2s',
+          }}
+        >
+          {expanded
+            ? <RemoveIcon sx={{ fontSize: 14, color: '#fff' }} />
+            : <AddIcon sx={{ fontSize: 14, color: '#999' }} />}
+        </Box>
       </Box>
+
+      {/* Collapsible content */}
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <Box sx={{ ml: options.length > 0 ? 4 : 1, mt: 1 }}>
+        <Box sx={{ px: '14px', py: '8px' }}>
           <FormGroup>
             {options.map((opt) => (
               <FormControlLabel
                 key={opt}
                 control={
-                  <Checkbox 
+                  <Checkbox
                     checked={selected.includes(opt)}
                     onChange={() => onChange(opt)}
                     size="small"
-                    sx={{ color: '#ccc', '&.Mui-checked': { color: '#00c853' } }}
+                    sx={{ color: '#d0d0d0', '&.Mui-checked': { color: '#00c853' } }}
                   />
                 }
-                label={<Typography sx={{ fontSize: '0.85rem', color: '#666' }}>{opt}</Typography>}
+                label={
+                  <Typography
+                    sx={{
+                      fontSize: '0.84rem',
+                      color: selected.includes(opt) ? '#00c853' : '#444',
+                      fontWeight: selected.includes(opt) ? 600 : 400,
+                      transition: 'color 0.15s',
+                    }}
+                  >
+                    {opt}
+                  </Typography>
+                }
+                sx={{ ml: 0, mb: '2px' }}
               />
             ))}
           </FormGroup>
@@ -138,39 +121,103 @@ const SidebarFilterGroup = ({ title, options = [], selected = [], onChange = () 
   );
 };
 
+/* ── Filter panel — organized into card sections ── */
+const FilterContent = ({ minRating, setMinRating, selectedBrands, handleBrandToggle, selectedCategories, handleCategoryToggle, priceRange, handlePriceChange }) => (
+  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+
+    {/* Top Rating */}
+    <SidebarFilterGroup title="⭐ Top Rating" defaultExpanded={true}>
+      <RadioGroup value={minRating} onChange={(e) => setMinRating(Number(e.target.value))}>
+        {[
+          { value: 0,   label: 'Any Rating' },
+          { value: 4.0, label: '4.0 & up' },
+          { value: 4.5, label: '4.5 & up' },
+        ].map(({ value, label }) => (
+          <FormControlLabel
+            key={value}
+            value={value}
+            control={
+              <Radio
+                size="small"
+                sx={{ color: '#d0d0d0', '&.Mui-checked': { color: '#00c853' } }}
+              />
+            }
+            label={
+              <Typography
+                sx={{
+                  fontSize: '0.84rem',
+                  color: minRating === value ? '#00c853' : '#444',
+                  fontWeight: minRating === value ? 600 : 400,
+                }}
+              >
+                {label}
+              </Typography>
+            }
+            sx={{ ml: 0, mb: '2px' }}
+          />
+        ))}
+      </RadioGroup>
+    </SidebarFilterGroup>
+
+    {/* Brands */}
+    <SidebarFilterGroup
+      title="🏷 Brands"
+      options={BRANDS}
+      selected={selectedBrands}
+      onChange={handleBrandToggle}
+      defaultExpanded={true}
+    />
+
+    {/* Categories */}
+    <SidebarFilterGroup
+      title="📦 Categories"
+      options={CATEGORIES}
+      selected={selectedCategories}
+      onChange={handleCategoryToggle}
+      defaultExpanded={true}
+    />
+
+    {/* Price Range */}
+    <SidebarFilterGroup title="💰 Price Range" defaultExpanded={true}>
+      <Box sx={{ px: 1, pt: 1, pb: 1 }}>
+        <Slider
+          value={priceRange}
+          onChange={handlePriceChange}
+          valueLabelDisplay="auto"
+          valueLabelFormat={(v) => `Rs ${v}`}
+          min={0}
+          max={5000}
+          sx={{
+            color: '#00c853',
+            '& .MuiSlider-thumb': { width: 16, height: 16 },
+          }}
+        />
+        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <Typography variant="caption" sx={{ color: '#00c853', fontWeight: 600 }}>Rs {priceRange[0]}</Typography>
+          <Typography variant="caption" sx={{ color: '#00c853', fontWeight: 600 }}>Rs {priceRange[1]}</Typography>
+        </Box>
+      </Box>
+    </SidebarFilterGroup>
+  </Box>
+);
+
 const Products = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false); // mobile filter drawer
 
   const [minRating, setMinRating] = useState(0);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 5000]);
 
-  const handleBuyNow = (product) => {
-    setSelectedProduct(product);
-    setSnackbarOpen(true);
-  };
+  const navigate = useNavigate();
 
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false);
-  };
-
-  const handleBrandToggle = (brand) => {
-    setSelectedBrands((prev) => 
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
-    );
-  };
-
-  const handleCategoryToggle = (category) => {
-    setSelectedCategories((prev) => 
-      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
-    );
-  };
-
-  const handlePriceChange = (event, newValue) => {
-    setPriceRange(newValue);
-  };
+  const handleBuyNow = (product) => setSelectedProduct(product);
+  const handleCloseSnackbar = () => setSnackbarOpen(false);
+  const handleBrandToggle = (brand) => setSelectedBrands((prev) => prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]);
+  const handleCategoryToggle = (category) => setSelectedCategories((prev) => prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]);
+  const handlePriceChange = (event, newValue) => setPriceRange(newValue);
 
   const filteredProducts = useMemo(() => {
     return DUMMY_PRODUCTS.filter(product => {
@@ -179,119 +226,254 @@ const Products = () => {
       const matchRating = product.rating >= minRating;
       const effectivePrice = product.discountPrice || product.price;
       const matchPrice = effectivePrice >= priceRange[0] && effectivePrice <= priceRange[1];
-      
       return matchBrand && matchCategory && matchRating && matchPrice;
     });
   }, [selectedBrands, selectedCategories, minRating, priceRange]);
 
+  const filterProps = { minRating, setMinRating, selectedBrands, handleBrandToggle, selectedCategories, handleCategoryToggle, priceRange, handlePriceChange };
+
+  // Count active filters for badge
+  const activeFilterCount = selectedBrands.length + selectedCategories.length + (minRating > 0 ? 1 : 0) + (priceRange[0] > 0 || priceRange[1] < 5000 ? 1 : 0);
+
   return (
     <Box className="animate-fade-in">
       
-      {/* Hero Section (Full Width) */}
+      {/* Hero Section */}
       <Box sx={{ 
         display: 'flex', 
         mb: 6, 
         backgroundImage: `url(${heroImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        minHeight: '350px'
+        minHeight: { xs: '220px', md: '350px' }
       }}>
-        <Box sx={{ p: { xs: 4, md: 6, lg: 8 }, display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: '800px' }}>
-          <Typography variant="h3" component="h1" fontWeight="bold" sx={{ color: '#134e2c', lineHeight: 1.2 }}>
+        <Box sx={{ p: { xs: 3, md: 6, lg: 8 }, display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: '800px' }}>
+          <Typography variant="h3" component="h1" fontWeight="bold" sx={{ color: '#134e2c', lineHeight: 1.2, fontSize: { xs: '1.6rem', md: '3rem' } }}>
             Purity. Power.<br />Personalization.
           </Typography>
-          <Typography variant="h3" component="h2" fontWeight="bold" sx={{ color: '#134e2c', mb: 3, mt: 1, lineHeight: 1.2 }}>
+          <Typography variant="h3" component="h2" fontWeight="bold" sx={{ color: '#134e2c', mb: 3, mt: 1, lineHeight: 1.2, fontSize: { xs: '1.4rem', md: '3rem' } }}>
             Your Ritual, Reimagined.
           </Typography>
-          <Typography variant="body1" sx={{ color: '#333', lineHeight: 1.7, fontSize: '1.05rem', maxWidth: '600px' }}>
-            Experience restorative care from the curated Nature's Secret & Bellos collections. Explore deep cleansing, aloe-infused hydration, and purifying blends for face, hair, and body. Curated with the finest natural ingredients. Restorative care tailored for you.
+          <Typography variant="body1" sx={{ color: '#333', lineHeight: 1.7, fontSize: { xs: '0.9rem', md: '1.05rem' }, maxWidth: '600px' }}>
+            Experience restorative care from the curated Nature's Secret & Bellos collections. Explore deep cleansing, aloe-infused hydration, and purifying blends for face, hair, and body.
           </Typography>
         </Box>
       </Box>
 
       {/* Main Content */}
       <Container maxWidth="xl" sx={{ mb: 8 }}>
-        <Box sx={{ display: 'flex', gap: 4, flexDirection: { xs: 'column', md: 'row' } }}>
-        
-        {/* Left Sidebar Filters */}
-        <Box sx={{ width: { xs: '100%', md: '280px' }, flexShrink: 0 }}>
-          <Box sx={{ position: 'sticky', top: 100, pr: 2 }}>
-            
-            {/* Top Rating */}
-            <SidebarFilterGroup title="Top Rating" defaultExpanded={true}>
-              <RadioGroup
-                value={minRating}
-                onChange={(e) => setMinRating(Number(e.target.value))}
+
+        {/* ── Mobile: Filter button — left corner between hero and cards ── */}
+        <Box
+          sx={{
+            display: { xs: 'flex', md: 'none' },
+            justifyContent: 'flex-start',   // anchors to LEFT corner
+            mb: '20px',
+            mt:"-30px"
+          }}
+        >
+          <Box
+            onClick={() => setDrawerOpen(true)}
+            sx={{
+              position: 'relative',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '8px',
+              bgcolor: '#00c853',
+              color: 'white',
+              px: '16px',
+              py: '8px',
+              borderRadius: '10px',
+              boxShadow: '0 4px 14px rgba(0,200,83,0.35)',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              '&:hover': { bgcolor: '#00a846', transform: 'translateY(-1px)', boxShadow: '0 6px 18px rgba(0,200,83,0.4)' },
+            }}
+          >
+            <TuneIcon sx={{ fontSize: 20 }} />
+            <Typography sx={{ fontSize: '13px', fontWeight: 700, letterSpacing: 0.5 }}>
+              FILTERS
+            </Typography>
+
+            {/* Active filter count badge */}
+            {activeFilterCount > 0 && (
+              <Box
+                sx={{
+                  position: 'absolute',
+                  top: -7,
+                  right: -7,
+                  width: 20,
+                  height: 20,
+                  borderRadius: '50%',
+                  bgcolor: '#ff4444',
+                  color: 'white',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  border: '2px solid white',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                }}
               >
-                <FormControlLabel value={0} control={<Radio size="small" sx={{ color: '#ccc', '&.Mui-checked': { color: '#00c853' } }} />} label={<Typography sx={{ fontSize: '0.85rem', color: '#666' }}>Any Rating</Typography>} />
-                <FormControlLabel value={4.0} control={<Radio size="small" sx={{ color: '#ccc', '&.Mui-checked': { color: '#00c853' } }} />} label={<Typography sx={{ fontSize: '0.85rem', color: '#666' }}>4.0 & up</Typography>} />
-                <FormControlLabel value={4.5} control={<Radio size="small" sx={{ color: '#ccc', '&.Mui-checked': { color: '#00c853' } }} />} label={<Typography sx={{ fontSize: '0.85rem', color: '#666' }}>4.5 & up</Typography>} />
-              </RadioGroup>
-            </SidebarFilterGroup>
-
-            {/* Brands */}
-            <SidebarFilterGroup 
-              title="Brands" 
-              options={BRANDS} 
-              selected={selectedBrands} 
-              onChange={handleBrandToggle} 
-              defaultExpanded={true}
-            />
-
-            {/* Products (Categories) */}
-            <SidebarFilterGroup 
-              title="Products" 
-              options={CATEGORIES} 
-              selected={selectedCategories} 
-              onChange={handleCategoryToggle} 
-              defaultExpanded={true}
-            />
-
-            {/* Price Range */}
-            <SidebarFilterGroup title="Price Range" defaultExpanded={true}>
-              <Box sx={{ px: 2, pt: 2 }}>
-                <Slider
-                  value={priceRange}
-                  onChange={handlePriceChange}
-                  valueLabelDisplay="auto"
-                  min={0}
-                  max={5000}
-                  sx={{ color: '#00c853' }}
-                />
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 1 }}>
-                  <Typography variant="body2" color="text.secondary">Rs {priceRange[0]}</Typography>
-                  <Typography variant="body2" color="text.secondary">Rs {priceRange[1]}</Typography>
-                </Box>
+                {activeFilterCount}
               </Box>
-            </SidebarFilterGroup>
-
+            )}
           </Box>
         </Box>
 
-        {/* Right Side Products Grid */}
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={3}>
+        {/* ── Mobile Filter Drawer — polished & organized ───────────────────── */}
+        <Drawer
+          anchor="left"
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          PaperProps={{
+            sx: {
+              width: 320,
+              bgcolor: '#f8f9fa',
+              display: 'flex',
+              flexDirection: 'column',
+            },
+          }}
+        >
+          {/* ── Drawer Header ── */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              px: '16px',
+              py: '14px',
+              bgcolor: '#1a2b4c',
+              color: 'white',
+              flexShrink: 0,
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <TuneIcon sx={{ fontSize: 20 }} />
+              <Typography variant="h6" fontWeight={700} sx={{ fontSize: '1rem', letterSpacing: 0.5 }}>
+                Filter Products
+              </Typography>
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {activeFilterCount > 0 && (
+                <Typography
+                  sx={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    color: '#00c853',
+                    bgcolor: 'rgba(0,200,83,0.15)',
+                    px: '8px',
+                    py: '2px',
+                    borderRadius: '12px',
+                  }}
+                >
+                  {activeFilterCount} active
+                </Typography>
+              )}
+              <IconButton onClick={() => setDrawerOpen(false)} size="small" sx={{ color: 'rgba(255,255,255,0.8)', '&:hover': { color: '#fff', bgcolor: 'rgba(255,255,255,0.1)' } }}>
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </Box>
+          </Box>
+
+          {/* ── Scrollable filter content ── */}
+          <Box sx={{ flex: 1, overflowY: 'auto', p: '12px' }}>
+            <FilterContent {...filterProps} />
+          </Box>
+
+          {/* ── Footer actions ── */}
+          <Box
+            sx={{
+              display: 'flex',
+              gap: '10px',
+              p: '12px 16px',
+              borderTop: '1px solid #e8e8e8',
+              bgcolor: '#fff',
+              flexShrink: 0,
+            }}
+          >
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={() => {
+                filterProps.setMinRating(0);
+                filterProps.selectedBrands.forEach(b => filterProps.handleBrandToggle(b));
+                filterProps.selectedCategories.forEach(c => filterProps.handleCategoryToggle(c));
+                filterProps.handlePriceChange(null, [0, 5000]);
+              }}
+              sx={{
+                flex: 1,
+                borderColor: '#ddd',
+                color: '#666',
+                borderRadius: '6px',
+                fontWeight: 600,
+                fontSize: '0.72rem',
+                py: '5px',
+                '&:hover': { borderColor: '#999', bgcolor: 'rgba(0,0,0,0.03)' },
+              }}
+            >
+              Clear All
+            </Button>
+            <Button
+              size="small"
+              variant="contained"
+              onClick={() => setDrawerOpen(false)}
+              sx={{
+                flex: 2,
+                bgcolor: '#00c853',
+                '&:hover': { bgcolor: '#00a846' },
+                borderRadius: '6px',
+                fontWeight: 700,
+                fontSize: '0.75rem',
+                py: '5px',
+                boxShadow: '0 3px 8px rgba(0,200,83,0.3)',
+              }}
+            >
+              Show {filteredProducts.length} Results
+            </Button>
+          </Box>
+        </Drawer>
+
+        {/* ── Desktop + Mobile layout row ─────────────────────────────────── */}
+        <Box sx={{ display: 'flex', gap: 4, flexDirection: { xs: 'column', md: 'row' } }}>
+
+          {/* Desktop Sidebar Filters — hidden on mobile */}
+          <Box sx={{ width: { xs: '100%', md: '280px' }, flexShrink: 0, display: { xs: 'none', md: 'block' } }}>
+            <Box sx={{ position: 'sticky', top: 100, pr: 2 }}>
+              <FilterContent {...filterProps} />
+            </Box>
+          </Box>
+
+          {/* Products grid — flex-wrap so fixed 273px cards center naturally on all screens */}
+          <Box
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              columnGap: { xs: '16px', sm: '20px', md: '24px' },
+              rowGap: { xs: '8px', sm: '10px', md: '12px' },
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              alignContent: 'flex-start',
+            }}
+          >
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product) => (
-                <Grid item key={product.id} xs={12} sm={6} md={4} lg={3}>
-                  <ProductCard product={product} onBuyNow={handleBuyNow} />
-                </Grid>
+                <ProductCard key={product.id} product={product} onBuyNow={handleBuyNow} />
               ))
             ) : (
-              <Grid item xs={12}>
-                <Box sx={{ textAlign: 'center', py: 10 }}>
-                  <Typography variant="h6" color="text.secondary">
-                    No products match your selected filters.
-                  </Typography>
-                </Box>
-              </Grid>
+              <Box sx={{ textAlign: 'center', py: 10, width: '100%' }}>
+                <Typography variant="h6" color="text.secondary">
+                  No products match your selected filters.
+                </Typography>
+              </Box>
             )}
-          </Grid>
+          </Box>
+
         </Box>
-      </Box>
       </Container>
 
-      {/* Purchase Confirmation Toast */}
+      {/* Toast */}
       <Snackbar 
         open={snackbarOpen} 
         autoHideDuration={3000} 
@@ -302,6 +484,10 @@ const Products = () => {
           {selectedProduct?.name} added to cart!
         </Alert>
       </Snackbar>
+
+      {selectedProduct && (
+        <Checkout product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+      )}
     </Box>
   );
 };
