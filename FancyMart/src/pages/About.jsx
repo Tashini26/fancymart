@@ -1,5 +1,9 @@
 import React from 'react';
-import { Container, Typography, Box, Grid, Card, CardContent, Avatar } from '@mui/material';
+import { Container, Typography, Box, Grid, Card, CardContent, Avatar, useTheme, useMediaQuery } from '@mui/material';
+import SliderLib from "react-slick";
+const Slider = SliderLib.default ? SliderLib.default : SliderLib;
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { 
   VerifiedUser as QualityIcon, 
   LocalShipping as ShippingIcon, 
@@ -8,6 +12,24 @@ import {
 } from '@mui/icons-material';
 
 const About = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 600,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2500,
+    pauseOnHover: false,
+    pauseOnFocus: false,
+    arrows: false,
+    swipeToSlide: true,
+    cssEase: "ease-in-out"
+  };
+
   const values = [
     {
       icon: <QualityIcon fontSize="large" color="primary" />,
@@ -59,111 +81,171 @@ const About = () => {
       </Box>
 
       {/* Our Story Section */}
-      <Container maxWidth="lg" sx={{ pt: { xs: 2, md: 4 }, pb: { xs: 8, md: 12 } }}>
-        <Grid container spacing={8} alignItems="center">
-          <Grid item xs={12} md={6}>
-            <Box sx={{ position: 'relative' }}>
-              <Box 
-                sx={{ 
-                  width: '100%', 
-                  height: '400px', 
-                  bgcolor: '#e0e0e0', 
-                  borderRadius: '24px',
-                  backgroundImage: 'url("https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&q=80&w=800")',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  boxShadow: '0 20px 40px rgba(0,0,0,0.1)'
-                }} 
-              />
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Typography variant="overline" color="primary" fontWeight="bold" sx={{ letterSpacing: 2 }}>
-              OUR STORY
-            </Typography>
-            <Typography variant="h3" fontWeight="bold" gutterBottom sx={{ mt: 1, mb: 3, color: 'primary.main' }}>
-              Born from a passion for excellence.
-            </Typography>
-            <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', lineHeight: 1.8, color: 'text.secondary' }}>
-              Founded in 2026, FancyMart started with a simple idea: to create a curated marketplace where quality meets accessibility. Frustrated by the endless sea of mediocre products online, our founders set out to build a platform they would want to use themselves.
-            </Typography>
-            <Typography variant="body1" sx={{ fontSize: '1.1rem', lineHeight: 1.8, color: 'text.secondary' }}>
-              Today, we serve thousands of customers globally, bringing them hand-picked items from independent creators and established luxury brands alike. We don't just sell products; we deliver a standard of living.
-            </Typography>
-          </Grid>
-        </Grid>
+      <Container maxWidth="lg" sx={{ pt: { xs: 4, md: 6 }, pb: { xs: 8, md: 0 }, textAlign: 'center' }}>
+        <Typography variant="overline" color="primary" fontWeight="bold" sx={{ letterSpacing: 2 }}>
+          OUR STORY
+        </Typography>
+        <Typography variant="h3" fontWeight="bold" gutterBottom sx={{ mt: 1, mb: 3, color: 'primary.main' }}>
+          Born from a passion for excellence.
+        </Typography>
+        <Typography variant="body1" sx={{ mb: 2, fontSize: '1.1rem', lineHeight: 1.8, color: 'text.secondary' }}>
+          Founded in 2026, FancyMart started with a simple idea: to create a curated marketplace where quality meets accessibility. Frustrated by the endless sea of mediocre products online, our founders set out to build a platform they would want to use themselves.
+        </Typography>
+        <Typography variant="body1" sx={{ fontSize: '1.1rem', lineHeight: 1.8, color: 'text.secondary' }}>
+          Today, we serve thousands of customers globally, bringing them hand-picked items from independent creators and established luxury brands alike. We don't just sell products; we deliver a standard of living.
+        </Typography>
       </Container>
 
       {/* Values Section */}
-      <Box sx={{ bgcolor: '#f8f9fa', py: { xs: 8, md: 12 } }}>
-        <Container maxWidth="lg">
-          <Box textAlign="center" mb={8}>
-            <Typography variant="h3" fontWeight="bold" sx={{ color: 'primary.main' }}>
+      <Box sx={{ bgcolor: '#f8f9fa', py: { xs: 8, md: 8 } }}>
+        <Container maxWidth="xl" sx={{ px: { xs: 2, md: 4 } }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', mb: 8 }}>
+            <Typography variant="h3" fontWeight="bold" align="center" sx={{ color: 'primary.main' }}>
               Why Choose Us
             </Typography>
-            <Typography variant="h6" color="text.secondary" sx={{ mt: 2, fontWeight: 400 }}>
+            <Typography variant="h6" color="text.secondary" align="center" sx={{ mt: 3, fontWeight: 400 }}>
               The pillars that hold up the FancyMart experience.
             </Typography>
           </Box>
           
-          <Grid container spacing={4}>
-            {values.map((value, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
-                <Card sx={{ height: '100%', border: 'none', boxShadow: '0 4px 24px rgba(0,0,0,0.04)', borderRadius: 4, transition: 'transform 0.3s', '&:hover': { transform: 'translateY(-8px)' } }}>
-                  <CardContent sx={{ p: 4, textAlign: 'center' }}>
-                    <Box sx={{ mb: 2, display: 'inline-flex', p: 2, borderRadius: '50%', bgcolor: 'rgba(0, 200, 83, 0.1)' }}>
+          {isMobile ? (
+            <Box sx={{ 
+              maxWidth: '320px', 
+              mx: 'auto', 
+              mt: 6,
+              mb: 4,
+              '.slick-dots': { bottom: '-45px' },
+              '.slick-dots li button:before': { fontSize: '14px', color: '#9e9e9e', opacity: 0.7, transition: 'all 0.3s' },
+              '.slick-dots li.slick-active button:before': { color: 'primary.main', opacity: 1, transform: 'scale(1.2)' },
+              '.slick-slide > div': { display: 'flex', justifyContent: 'center' }
+            }}>
+              <Slider {...sliderSettings}>
+                {values.map((value, index) => (
+                  <Card 
+                    key={index}
+                    sx={{ 
+                      width: '295px !important',
+                      height: '359px',
+                      border: 'none', 
+                      boxShadow: '0 4px 24px rgba(0,0,0,0.06)', 
+                      borderRadius: '20px', 
+                      display: 'flex !important',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      mx: 'auto'
+                    }}
+                  >
+                    <CardContent sx={{ p: '40px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+                      <Box 
+                        sx={{ 
+                          mb: 3, 
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '56.69px',
+                          height: '56.69px',
+                          borderRadius: '56.69px', 
+                          bgcolor: 'rgba(0, 200, 83, 0.1)',
+                          padding: '14px',
+                          boxSizing: 'border-box'
+                        }}
+                      >
+                        {value.icon}
+                      </Box>
+                      <Typography variant="h6" fontWeight="bold" gutterBottom sx={{ fontSize: '1.1rem', mb: 2 }}>
+                        {value.title}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7, fontSize: '0.9rem' }}>
+                        {value.description}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                ))}
+              </Slider>
+            </Box>
+          ) : (
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', mt: 6 }}>
+              {values.map((value, index) => (
+                <Card 
+                  key={index}
+                  sx={{ 
+                    width: '295px',
+                    height: '359px',
+                    border: 'none', 
+                    boxShadow: '0 4px 24px rgba(0,0,0,0.06)', 
+                    borderRadius: '20px', 
+                    transition: 'all 0.3s ease', 
+                    '&:hover': { transform: 'translateY(-8px)', boxShadow: '0 12px 30px rgba(0,0,0,0.1)' },
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <CardContent sx={{ p: '40px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+                    <Box 
+                      sx={{ 
+                        mb: 3, 
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '56.69px',
+                        height: '56.69px',
+                        borderRadius: '56.69px', 
+                        bgcolor: 'rgba(0, 200, 83, 0.1)',
+                        padding: '14px',
+                        boxSizing: 'border-box'
+                      }}
+                    >
                       {value.icon}
                     </Box>
-                    <Typography variant="h6" fontWeight="bold" gutterBottom>
+                    <Typography variant="h6" fontWeight="bold" gutterBottom sx={{ fontSize: '1.1rem', mb: 2 }}>
                       {value.title}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7, fontSize: '0.9rem' }}>
                       {value.description}
                     </Typography>
                   </CardContent>
                 </Card>
-              </Grid>
-            ))}
-          </Grid>
+              ))}
+            </Box>
+          )}
         </Container>
       </Box>
 
       {/* Team Section */}
-      <Container maxWidth="lg" sx={{ py: { xs: 8, md: 12 } }}>
-        <Box textAlign="center" mb={8}>
-          <Typography variant="h3" fontWeight="bold" sx={{ color: '#1a2b4c' }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 8, md: 1 } }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', mb: 8 }}>
+          <Typography variant="h3" fontWeight="bold" align="center" sx={{ color: '#1a2b4c' }}>
             Meet the Team
           </Typography>
-          <Typography variant="h6" color="text.secondary" sx={{ mt: 2, fontWeight: 400 }}>
+          <Typography variant="h6" color="text.secondary" align="center" sx={{ mt: 2, fontWeight: 400 }}>
             The creative minds behind the curation.
           </Typography>
         </Box>
 
-        <Grid container spacing={6} justifyContent="center">
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '60px',mb:8 }}>
           {team.map((member, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Box textAlign="center">
-                <Avatar 
-                  src={member.img} 
-                  alt={member.name}
-                  sx={{ 
-                    width: 140, 
-                    height: 140, 
-                    mx: 'auto', 
-                    mb: 3,
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.12)' 
-                  }} 
-                />
-                <Typography variant="h6" fontWeight="bold">
-                  {member.name}
-                </Typography>
-                <Typography variant="body2" color="primary" fontWeight="bold" sx={{ textTransform: 'uppercase', letterSpacing: 1, mt: 0.5 }}>
-                  {member.role}
-                </Typography>
-              </Box>
-            </Grid>
+            <Box key={index} sx={{ textAlign: 'center', minWidth: '200px' }}>
+              <Avatar 
+                src={member.img} 
+                alt={member.name}
+                sx={{ 
+                  width: 140, 
+                  height: 140, 
+                  mx: 'auto', 
+                  mb: 3,
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)' 
+                }} 
+              />
+              <Typography variant="h6" fontWeight="bold">
+                {member.name}
+              </Typography>
+              <Typography variant="body2" color="primary" fontWeight="bold" sx={{ textTransform: 'uppercase', letterSpacing: 1, mt: 0.5 }}>
+                {member.role}
+              </Typography>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       </Container>
     </Box>
   );
