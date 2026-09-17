@@ -12,6 +12,7 @@ import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import Footer from './components/Footer';
 
 
 import './index.css';
@@ -27,9 +28,9 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
         <Router>
-          <div className="app">
+          <div className="app" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
             <Navbar />
-            <main className="main-content">
+            <main className="main-content" style={{ flexGrow: 1 }}>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
@@ -43,6 +44,7 @@ function App() {
 
               </Routes>
             </main>
+            <Footer />
           </div>
         </Router>
         </ThemeProvider>
