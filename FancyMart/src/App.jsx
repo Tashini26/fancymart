@@ -13,6 +13,7 @@ import Profile from './pages/Profile';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Footer from './components/Footer';
+import TopToScroll from './components/TopToScroll';
 
 
 import './index.css';
@@ -42,6 +43,7 @@ function AppLayout() {
         </Routes>
       </main>
       {!hideFooter && <Footer />}
+      <TopToScroll />
     </div>
   );
 }
