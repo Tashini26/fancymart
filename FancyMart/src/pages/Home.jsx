@@ -11,8 +11,14 @@ import {
   Avatar,
   Rating,
   Snackbar,
-  Alert
+  Alert,
+  useTheme,
+  useMediaQuery
 } from '@mui/material';
+import SliderLib from "react-slick";
+const Slider = SliderLib.default ? SliderLib.default : SliderLib;
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import { DUMMY_PRODUCTS, BRANDS } from '../data/products';
 import ProductCard from '../components/ProductCard';
 import Checkout from './Checkout';
@@ -26,6 +32,24 @@ const TESTIMONIALS = [
 ];
 
 const Home = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 600,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 2500,
+    pauseOnHover: false,
+    pauseOnFocus: false,
+    arrows: false,
+    swipeToSlide: true,
+    cssEase: "ease-in-out"
+  };
+
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
@@ -63,7 +87,18 @@ const Home = () => {
         {/* Overlay for text readability */}
         <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, bgcolor: 'rgba(255, 255, 255, 0.4)' }} />
         
-        <Box sx={{ p: { xs: 3, md: 6, lg: 8 }, display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: '800px', zIndex: 1 }}>
+        <Box 
+          sx={{ 
+            p: { xs: 3, md: 6, lg: 8 }, 
+            display: 'flex', 
+            flexDirection: 'column', 
+            justifyContent: 'center', 
+            alignItems: { xs: 'center', md: 'flex-start' },
+            textAlign: { xs: 'center', md: 'left' },
+            maxWidth: '800px', 
+            zIndex: 1 
+          }}
+        >
           <Typography variant="h2" component="h1" fontWeight="bold" sx={{ color: '#134e2c', lineHeight: 1.2, fontSize: { xs: '2.5rem', md: '4.5rem' } }}>
             Glow Every Day
           </Typography>
@@ -84,52 +119,7 @@ const Home = () => {
         </Box>
       </Box>
 
-      {/* Brand Marquee (Infinite Loop) */}
-      <Container maxWidth="xl" sx={{ mb: 10, overflow: 'hidden' }}>
-        <Typography variant="subtitle1" align="center" color="text.secondary" gutterBottom sx={{ mb: 3, textTransform: 'uppercase', letterSpacing: 2, fontWeight: 'bold' }}>
-          Trusted Brands
-        </Typography>
-        <Box 
-          sx={{
-            display: 'flex',
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-            position: 'relative',
-            // Fade effect on edges
-            '&::before, &::after': {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              width: '100px',
-              height: '100%',
-              zIndex: 2,
-            },
-            '&::before': {
-              left: 0,
-              background: 'linear-gradient(to right, #f8fafc, transparent)',
-            },
-            '&::after': {
-              right: 0,
-              background: 'linear-gradient(to left, #f8fafc, transparent)',
-            }
-          }}
-        >
-          <Box 
-            sx={{
-              display: 'inline-flex',
-              animation: 'scroll 15s linear infinite',
-              gap: 10,
-              pr: 10, // Must match gap for seamless loop
-            }}
-          >
-            {loopingBrands.map((brand, idx) => (
-              <Typography key={idx} variant="h4" fontWeight="bold" color="#cbd5e1" sx={{ minWidth: 'max-content' }}>
-                {brand}
-              </Typography>
-            ))}
-          </Box>
-        </Box>
-      </Container>
+      {/* Brand Marquee moved below Top Rated */}
 
       {/* Top Selling Products */}
       <Container maxWidth="lg" sx={{ mb: 10 }}>
@@ -198,33 +188,136 @@ const Home = () => {
         </Box>
       </Container>
 
+      {/* Brand Marquee (Infinite Loop) */}
+      <Container maxWidth="xl" sx={{ mb: 10, overflow: 'hidden' }}>
+        <Typography variant="subtitle1" align="center" color="text.secondary" gutterBottom sx={{ mb: 3, textTransform: 'uppercase', letterSpacing: 2, fontWeight: 'bold' }}>
+          Trusted Brands
+        </Typography>
+        <Box 
+          sx={{
+            display: 'flex',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            position: 'relative',
+            // Fade effect on edges
+            '&::before, &::after': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              width: '100px',
+              height: '100%',
+              zIndex: 2,
+            },
+            '&::before': {
+              left: 0,
+              background: 'linear-gradient(to right, #f8fafc, transparent)',
+            },
+            '&::after': {
+              right: 0,
+              background: 'linear-gradient(to left, #f8fafc, transparent)',
+            }
+          }}
+        >
+          <Box 
+            sx={{
+              display: 'inline-flex',
+              animation: 'scroll 15s linear infinite',
+              gap: 10,
+              pr: 10, // Must match gap for seamless loop
+            }}
+          >
+            {loopingBrands.map((brand, idx) => (
+              <Typography key={idx} variant="h4" fontWeight="bold" color="#cbd5e1" sx={{ minWidth: 'max-content' }}>
+                {brand}
+              </Typography>
+            ))}
+          </Box>
+        </Box>
+      </Container>
+
       {/* Customer Testimonials */}
       <Container maxWidth="lg">
         <Typography variant="h3" align="center" fontWeight="bold" gutterBottom sx={{ mb: 6 }}>
           What Our Customers Say
         </Typography>
-        <Grid container spacing={4} justifyContent="center">
-          {TESTIMONIALS.map(testimonial => (
-            <Grid item xs={12} sm={6} md={4} key={testimonial.id}>
-              <Card elevation={2} sx={{ height: '100%', borderRadius: 4, p: 2, display: 'flex', flexDirection: 'column' }}>
-                <CardContent sx={{ textAlign: 'center', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+        {isMobile ? (
+          <Box sx={{ 
+            maxWidth: '340px', 
+            mx: 'auto', 
+            mb: 4,
+            '.slick-dots': { bottom: '-45px' },
+            '.slick-dots li button:before': { fontSize: '14px', color: '#9e9e9e', opacity: 0.7, transition: 'all 0.3s' },
+            '.slick-dots li.slick-active button:before': { color: 'primary.main', opacity: 1, transform: 'scale(1.2)' },
+            '.slick-slide > div': { display: 'flex', justifyContent: 'center' }
+          }}>
+            <Slider {...sliderSettings}>
+              {TESTIMONIALS.map(testimonial => (
+                <Card 
+                  key={testimonial.id}
+                  sx={{ 
+                    width: '320px !important',
+                    bgcolor: '#fff5f5',
+                    borderRadius: '20px', 
+                    boxShadow: 'none',
+                    display: 'flex !important', 
+                    flexDirection: 'column',
+                    mx: 'auto'
+                  }}
+                >
+                  <CardContent sx={{ textAlign: 'left', p: '32px 24px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <Avatar 
+                      src={testimonial.avatar} 
+                      alt={testimonial.name} 
+                      sx={{ width: 70, height: 70, mb: 3 }} 
+                    />
+                    <Typography variant="body1" color="text.secondary" sx={{ mb: 3, flexGrow: 1, lineHeight: 1.7, fontSize: '0.95rem' }}>
+                      "{testimonial.review}"
+                    </Typography>
+                    <Rating value={testimonial.rating} readOnly size="small" sx={{ mb: 1 }} />
+                    <Typography variant="subtitle2" fontWeight="bold" color="primary.main">
+                      {testimonial.name}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))}
+            </Slider>
+          </Box>
+        ) : (
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
+            {TESTIMONIALS.map(testimonial => (
+              <Card 
+                key={testimonial.id}
+                sx={{ 
+                  width: '320px',
+                  bgcolor: '#fff5f5', // soft pink background
+                  borderRadius: '20px', 
+                  boxShadow: 'none',
+                  display: 'flex', 
+                  flexDirection: 'column',
+                  transition: 'all 0.3s ease',
+                  '&:hover': { transform: 'translateY(-8px)', boxShadow: '0 12px 30px rgba(0,0,0,0.08)' },
+                }}
+              >
+                <CardContent sx={{ textAlign: 'left', p: '32px 24px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
                   <Avatar 
                     src={testimonial.avatar} 
                     alt={testimonial.name} 
-                    sx={{ width: 80, height: 80, mx: 'auto', mb: 2, border: '3px solid #f0f0f0' }} 
+                    sx={{ width: 70, height: 70, mb: 3 }} 
                   />
-                  <Rating value={testimonial.rating} readOnly sx={{ mb: 2, mx: 'auto' }} />
-                  <Typography variant="body1" color="text.secondary" sx={{ fontStyle: 'italic', mb: 3, flexGrow: 1 }}>
+                  <Typography variant="body1" color="text.secondary" sx={{ mb: 3, flexGrow: 1, lineHeight: 1.7, fontSize: '0.95rem' }}>
                     "{testimonial.review}"
                   </Typography>
-                  <Typography variant="subtitle1" fontWeight="bold" color="primary.main">
+                  
+                  {/* Keeping name and rating but left-aligned for context */}
+                  <Rating value={testimonial.rating} readOnly size="small" sx={{ mb: 1 }} />
+                  <Typography variant="subtitle2" fontWeight="bold" color="primary.main">
                     {testimonial.name}
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
-          ))}
-        </Grid>
+            ))}
+          </Box>
+        )}
       </Container>
 
       {/* Checkout Modal & Snackbar */}

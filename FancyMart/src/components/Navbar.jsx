@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { CartContext } from '../context/CartContext';
+import CartDrawer from './CartDrawer';
 import {
   AppBar,
   Toolbar,
@@ -49,6 +50,7 @@ const Navbar = () => {
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
 
   const handleToggleMobile = () => setMobileOpen((prev) => !prev);
   const handleCloseMobile  = () => setMobileOpen(false);
@@ -147,8 +149,13 @@ const Navbar = () => {
               ml: 'auto',
             }}
           >
-            {/* Cart icon — always visible */}
-            <IconButton component={Link} to="/cart" color="inherit" aria-label="cart" size="small">
+            {/* Cart icon — opens CartDrawer */}
+            <IconButton
+              onClick={() => setCartDrawerOpen(true)}
+              color="inherit"
+              aria-label="open cart"
+              size="small"
+            >
               <Badge badgeContent={cartItemCount} color="error" showZero={false}>
                 <ShoppingCart sx={{ color: 'text.secondary', fontSize: { xs: 22, md: 24 } }} />
               </Badge>
@@ -380,6 +387,8 @@ const Navbar = () => {
           )}
         </Box>
       </Drawer>
+      {/* ── Cart Drawer — slides from RIGHT on cart icon click ── */}
+      <CartDrawer open={cartDrawerOpen} onClose={() => setCartDrawerOpen(false)} />
     </>
   );
 };
