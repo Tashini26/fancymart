@@ -169,13 +169,14 @@ const ProductCard = ({ product, onBuyNow }) => {
             onBuyNow(product);
           }}
           sx={{
+            display: { xs: 'none', md: 'inline-flex' },
             position: 'absolute',
             bottom: 0,
             left: 0,
             width: '100%',
             height: '38px',
             borderRadius: 0,
-            transform: { xs: 'translateY(0)', md: 'translateY(100%)' },
+            transform: 'translateY(100%)',
             transition: 'transform 0.3s ease',
             fontWeight: 'bold',
           }}
