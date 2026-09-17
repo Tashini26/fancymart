@@ -15,8 +15,11 @@ import {
   Slider,
   Drawer,
   Button,
+  TextField,
+  InputAdornment,
+  Autocomplete,
 } from '@mui/material';
-import { Remove as RemoveIcon, Add as AddIcon, Tune as TuneIcon, Close as CloseIcon } from '@mui/icons-material';
+import { Remove as RemoveIcon, Add as AddIcon, Tune as TuneIcon, Close as CloseIcon, Search as SearchIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import heroImage from '../assets/Product/hro.webp';
@@ -206,6 +209,7 @@ const Products = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false); // mobile filter drawer
 
+  const [searchTerm, setSearchTerm] = useState('');
   const [minRating, setMinRating] = useState(0);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -226,9 +230,10 @@ const Products = () => {
       const matchRating = product.rating >= minRating;
       const effectivePrice = product.discountPrice || product.price;
       const matchPrice = effectivePrice >= priceRange[0] && effectivePrice <= priceRange[1];
-      return matchBrand && matchCategory && matchRating && matchPrice;
+      const matchSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      return matchBrand && matchCategory && matchRating && matchPrice && matchSearch;
     });
-  }, [selectedBrands, selectedCategories, minRating, priceRange]);
+  }, [selectedBrands, selectedCategories, minRating, priceRange, searchTerm]);
 
   const filterProps = { minRating, setMinRating, selectedBrands, handleBrandToggle, selectedCategories, handleCategoryToggle, priceRange, handlePriceChange };
 
@@ -262,6 +267,52 @@ const Products = () => {
 
       {/* Main Content */}
       <Container maxWidth="xl" sx={{ mb: 8 }}>
+
+        {/* ── Search Bar ── */}
+        <Box sx={{ mb: 4, px: { xs: 2, sm: 0 }, display: 'flex', justifyContent: 'center' }}>
+          <Autocomplete
+            freeSolo
+            options={DUMMY_PRODUCTS.map((option) => option.name)}
+            value={searchTerm}
+            onInputChange={(event, newInputValue) => {
+              setSearchTerm(newInputValue);
+            }}
+            sx={{ maxWidth: '600px', width: '100%' }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                placeholder="Search products..."
+                sx={{
+                  bgcolor: 'white',
+                  borderRadius: '30px',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: '30px',
+                    paddingLeft: '20px',
+                    '& fieldset': {
+                      borderColor: 'transparent',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#00c853',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#00c853',
+                    },
+                  },
+                }}
+                InputProps={{
+                  ...params.InputProps,
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon sx={{ color: '#999' }} />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+          />
+        </Box>
 
         {/* ── Mobile: Filter button — left corner between hero and cards ── */}
         <Box
