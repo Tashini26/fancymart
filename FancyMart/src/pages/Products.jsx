@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Container, 
   Typography, 
@@ -18,6 +18,7 @@ import {
   TextField,
   InputAdornment,
   Autocomplete,
+  Pagination,
 } from '@mui/material';
 import { Remove as RemoveIcon, Add as AddIcon, Tune as TuneIcon, Close as CloseIcon, Search as SearchIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
@@ -214,6 +215,8 @@ const Products = () => {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 5000]);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 9;
 
   const navigate = useNavigate();
 
@@ -234,6 +237,15 @@ const Products = () => {
       return matchBrand && matchCategory && matchRating && matchPrice && matchSearch;
     });
   }, [selectedBrands, selectedCategories, minRating, priceRange, searchTerm]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [selectedBrands, selectedCategories, minRating, priceRange, searchTerm]);
+
+  const paginatedProducts = useMemo(() => {
+    const startIndex = (page - 1) * itemsPerPage;
+    return filteredProducts.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredProducts, page]);
 
   const filterProps = { minRating, setMinRating, selectedBrands, handleBrandToggle, selectedCategories, handleCategoryToggle, priceRange, handlePriceChange };
 
@@ -496,27 +508,45 @@ const Products = () => {
             </Box>
           </Box>
 
-          {/* Products grid — flex-wrap so fixed 273px cards center naturally on all screens */}
-          <Box
-            sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              columnGap: { xs: '16px', sm: '20px', md: '24px' },
-              rowGap: { xs: '8px', sm: '10px', md: '12px' },
-              justifyContent: 'center',
-              alignItems: 'flex-start',
-              alignContent: 'flex-start',
-            }}
-          >
-            {filteredProducts.length > 0 ? (
-              filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} onBuyNow={handleBuyNow} />
-              ))
-            ) : (
-              <Box sx={{ textAlign: 'center', py: 10, width: '100%' }}>
-                <Typography variant="h6" color="text.secondary">
-                  No products match your selected filters.
-                </Typography>
+          {/* Products grid and pagination */}
+          <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                columnGap: { xs: '16px', sm: '20px', md: '24px' },
+                rowGap: { xs: '8px', sm: '10px', md: '12px' },
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+                alignContent: 'flex-start',
+              }}
+            >
+              {paginatedProducts.length > 0 ? (
+                paginatedProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} onBuyNow={handleBuyNow} />
+                ))
+              ) : (
+                <Box sx={{ textAlign: 'center', py: 10, width: '100%' }}>
+                  <Typography variant="h6" color="text.secondary">
+                    No products match your selected filters.
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+
+            {/* Pagination Controls */}
+            {filteredProducts.length > itemsPerPage && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6, mb: 2 }}>
+                <Pagination 
+                  count={Math.ceil(filteredProducts.length / itemsPerPage)} 
+                  page={page} 
+                  onChange={(e, value) => {
+                    setPage(value);
+                    window.scrollTo({ top: 350, behavior: 'smooth' }); // Scroll to top of products smoothly
+                  }} 
+                  color="primary" 
+                  size="large"
+                />
               </Box>
             )}
           </Box>

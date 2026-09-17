@@ -58,6 +58,46 @@ export const DUMMY_PRODUCTS = [
     company: "Nature's Secret",
     category: 'Footcare',
     rating: 4.9
+  },
+  {
+    id: 7,
+    name: 'Bellos Herbal Shampoo',
+    price: 800.00,
+    discountPrice: 750.00,
+    image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&q=80',
+    company: 'Bellos',
+    category: 'Shampoo',
+    rating: 4.1
+  },
+  {
+    id: 8,
+    name: 'Nivea Soft Moisturizing Cream',
+    price: 1500.00,
+    discountPrice: 1300.00,
+    image: 'https://images.unsplash.com/photo-1617897903246-719242758050?w=500&q=80',
+    company: 'Nivea',
+    category: 'Skincare',
+    rating: 4.8
+  },
+  {
+    id: 9,
+    name: 'Unilever Anti-Dandruff Shampoo',
+    price: 900.00,
+    discountPrice: null,
+    image: 'https://images.unsplash.com/photo-1620822606612-421b443fa48a?w=500&q=80',
+    company: 'Unilever',
+    category: 'Shampoo',
+    rating: 4.3
+  },
+  {
+    id: 10,
+    name: "Nature's Secret Sandalwood Face Wash",
+    price: 450.00,
+    discountPrice: 400.00,
+    image: 'https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?w=500&q=80',
+    company: "Nature's Secret",
+    category: 'Face Wash',
+    rating: 4.7
   }
 ];
 
