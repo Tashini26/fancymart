@@ -3,8 +3,6 @@ import {
   Container, 
   Typography, 
   Box, 
-  Snackbar,
-  Alert,
   FormGroup,
   FormControlLabel,
   Checkbox,
@@ -21,11 +19,9 @@ import {
   Pagination,
 } from '@mui/material';
 import { Remove as RemoveIcon, Add as AddIcon, Tune as TuneIcon, Close as CloseIcon, Search as SearchIcon } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import heroImage from '../assets/Product/hro.webp';
 import Checkout from './Checkout';
-
 import { DUMMY_PRODUCTS, BRANDS, CATEGORIES } from '../data/products';
 
 /* ── Collapsible filter section — organized card style ── */
@@ -206,9 +202,8 @@ const FilterContent = ({ minRating, setMinRating, selectedBrands, handleBrandTog
 );
 
 const Products = () => {
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [drawerOpen, setDrawerOpen] = useState(false); // mobile filter drawer
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [minRating, setMinRating] = useState(0);
@@ -218,10 +213,7 @@ const Products = () => {
   const [page, setPage] = useState(1);
   const itemsPerPage = 9;
 
-  const navigate = useNavigate();
-
   const handleBuyNow = (product) => setSelectedProduct(product);
-  const handleCloseSnackbar = () => setSnackbarOpen(false);
   const handleBrandToggle = (brand) => setSelectedBrands((prev) => prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]);
   const handleCategoryToggle = (category) => setSelectedCategories((prev) => prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]);
   const handlePriceChange = (event, newValue) => setPriceRange(newValue);
@@ -553,18 +545,6 @@ const Products = () => {
 
         </Box>
       </Container>
-
-      {/* Toast */}
-      <Snackbar 
-        open={snackbarOpen} 
-        autoHideDuration={3000} 
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%', fontWeight: 'bold' }}>
-          {selectedProduct?.name} added to cart!
-        </Alert>
-      </Snackbar>
 
       {selectedProduct && (
         <Checkout product={selectedProduct} onClose={() => setSelectedProduct(null)} />

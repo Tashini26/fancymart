@@ -5,14 +5,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 const TopToScroll = () => {
   const [isVisible, setIsVisible] = useState(false);
 
-  // Show button when page is scrolled down 300px
-  const toggleVisibility = () => {
-    if (window.scrollY > 300) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  };
+  const toggleVisibility = () => setIsVisible(window.scrollY > 300);
 
   // Scroll to top smoothly
   const scrollToTop = () => {

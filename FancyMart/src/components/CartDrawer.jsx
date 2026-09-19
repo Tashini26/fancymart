@@ -8,7 +8,6 @@ import {
   IconButton,
   Button,
   Checkbox,
-  Divider,
 } from '@mui/material';
 import {
   Close as CloseIcon,

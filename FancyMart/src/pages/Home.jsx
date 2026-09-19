@@ -10,8 +10,6 @@ import {
   CardContent,
   Avatar,
   Rating,
-  Snackbar,
-  Alert,
   useTheme,
   useMediaQuery
 } from '@mui/material';
@@ -51,14 +49,9 @@ const Home = () => {
   };
 
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleBuyNow = (product) => {
     setSelectedProduct(product);
-  };
-
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false);
   };
 
   // Derive products from dummy data
@@ -319,18 +312,6 @@ const Home = () => {
           </Box>
         )}
       </Container>
-
-      {/* Checkout Modal & Snackbar */}
-      <Snackbar 
-        open={snackbarOpen} 
-        autoHideDuration={3000} 
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%', fontWeight: 'bold' }}>
-          {selectedProduct?.name} added to cart!
-        </Alert>
-      </Snackbar>
 
       {selectedProduct && (
         <Checkout product={selectedProduct} onClose={() => setSelectedProduct(null)} />

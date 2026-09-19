@@ -14,8 +14,6 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Footer from './components/Footer';
 import TopToScroll from './components/TopToScroll';
-
-
 import './index.css';
 
 import { ThemeProvider } from '@mui/material/styles';
