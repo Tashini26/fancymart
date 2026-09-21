@@ -71,14 +71,14 @@ const Home = () => {
   return (
     <Box className="animate-fade-in" sx={{ pb: 8 }}>
       {/* Hero Section */}
-      <Box 
-        sx={{ 
-          display: 'flex', 
-          mb: 8, 
+      <Box
+        sx={{
+          display: 'flex',
+          mb: 8,
           backgroundImage: `url(${heroImage})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          minHeight: { xs: '300px', md: '500px' },
+          minHeight: { xs: '300px', md: '550px' },
           borderRadius: { xs: 0, md: '0 0 32px 32px' },
           overflow: 'hidden',
           position: 'relative',
@@ -86,17 +86,17 @@ const Home = () => {
       >
         {/* Overlay for text readability */}
         <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, bgcolor: 'rgba(255, 255, 255, 0.4)' }} />
-        
-        <Box 
-          sx={{ 
-            p: { xs: 3, md: 6, lg: 8 }, 
-            display: 'flex', 
-            flexDirection: 'column', 
-            justifyContent: 'center', 
+
+        <Box
+          sx={{
+            p: { xs: 3, md: 6, lg: 8 },
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
             alignItems: { xs: 'center', md: 'flex-start' },
             textAlign: { xs: 'center', md: 'left' },
-            maxWidth: '800px', 
-            zIndex: 1 
+            maxWidth: '800px',
+            zIndex: 1
           }}
         >
           <Typography variant="h2" component="h1" fontWeight="bold" sx={{ color: '#134e2c', lineHeight: 1.2, fontSize: { xs: '2.5rem', md: '4.5rem' } }}>
@@ -106,10 +106,10 @@ const Home = () => {
             Discover our curated collection of premium beauty creams and skincare essentials. Your journey to flawless skin starts here.
           </Typography>
           <Box>
-            <Button 
-              component={RouterLink} 
-              to="/products" 
-              variant="contained" 
+            <Button
+              component={RouterLink}
+              to="/products"
+              variant="contained"
               size="large"
               sx={{ py: 1.5, px: 4, fontSize: '1.1rem', bgcolor: '#134e2c', '&:hover': { bgcolor: '#0f3d23' }, borderRadius: 2 }}
             >
@@ -153,10 +153,10 @@ const Home = () => {
           <Typography variant="h6" sx={{ opacity: 0.9, mb: 4, fontSize: { xs: '1rem', md: '1.25rem' } }}>
             Get up to 50% off on all selected Nature's Secret products. Limited time offer!
           </Typography>
-          <Button 
-            component={RouterLink} 
-            to="/products" 
-            variant="contained" 
+          <Button
+            component={RouterLink}
+            to="/products"
+            variant="contained"
             color="primary"
             size="large"
             sx={{ py: 1.5, px: 6, fontSize: '1.2rem', borderRadius: 8, boxShadow: 4 }}
@@ -193,7 +193,7 @@ const Home = () => {
         <Typography variant="subtitle1" align="center" color="text.secondary" gutterBottom sx={{ mb: 3, textTransform: 'uppercase', letterSpacing: 2, fontWeight: 'bold' }}>
           Trusted Brands
         </Typography>
-        <Box 
+        <Box
           sx={{
             display: 'flex',
             overflow: 'hidden',
@@ -218,7 +218,7 @@ const Home = () => {
             }
           }}
         >
-          <Box 
+          <Box
             sx={{
               display: 'inline-flex',
               animation: 'scroll 15s linear infinite',
@@ -241,9 +241,9 @@ const Home = () => {
           What Our Customers Say
         </Typography>
         {isMobile ? (
-          <Box sx={{ 
-            maxWidth: '340px', 
-            mx: 'auto', 
+          <Box sx={{
+            maxWidth: '340px',
+            mx: 'auto',
             mb: 4,
             '.slick-dots': { bottom: '-45px' },
             '.slick-dots li button:before': { fontSize: '14px', color: '#9e9e9e', opacity: 0.7, transition: 'all 0.3s' },
@@ -252,23 +252,23 @@ const Home = () => {
           }}>
             <Slider {...sliderSettings}>
               {TESTIMONIALS.map(testimonial => (
-                <Card 
+                <Card
                   key={testimonial.id}
-                  sx={{ 
+                  sx={{
                     width: '320px !important',
                     bgcolor: '#fff5f5',
-                    borderRadius: '20px', 
+                    borderRadius: '20px',
                     boxShadow: 'none',
-                    display: 'flex !important', 
+                    display: 'flex !important',
                     flexDirection: 'column',
                     mx: 'auto'
                   }}
                 >
                   <CardContent sx={{ textAlign: 'left', p: '32px 24px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                    <Avatar 
-                      src={testimonial.avatar} 
-                      alt={testimonial.name} 
-                      sx={{ width: 70, height: 70, mb: 3 }} 
+                    <Avatar
+                      src={testimonial.avatar}
+                      alt={testimonial.name}
+                      sx={{ width: 70, height: 70, mb: 3 }}
                     />
                     <Typography variant="body1" color="text.secondary" sx={{ mb: 3, flexGrow: 1, lineHeight: 1.7, fontSize: '0.95rem' }}>
                       "{testimonial.review}"
@@ -285,29 +285,29 @@ const Home = () => {
         ) : (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '30px' }}>
             {TESTIMONIALS.map(testimonial => (
-              <Card 
+              <Card
                 key={testimonial.id}
-                sx={{ 
+                sx={{
                   width: '320px',
                   bgcolor: '#fff5f5', // soft pink background
-                  borderRadius: '20px', 
+                  borderRadius: '20px',
                   boxShadow: 'none',
-                  display: 'flex', 
+                  display: 'flex',
                   flexDirection: 'column',
                   transition: 'all 0.3s ease',
                   '&:hover': { transform: 'translateY(-8px)', boxShadow: '0 12px 30px rgba(0,0,0,0.08)' },
                 }}
               >
                 <CardContent sx={{ textAlign: 'left', p: '32px 24px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                  <Avatar 
-                    src={testimonial.avatar} 
-                    alt={testimonial.name} 
-                    sx={{ width: 70, height: 70, mb: 3 }} 
+                  <Avatar
+                    src={testimonial.avatar}
+                    alt={testimonial.name}
+                    sx={{ width: 70, height: 70, mb: 3 }}
                   />
                   <Typography variant="body1" color="text.secondary" sx={{ mb: 3, flexGrow: 1, lineHeight: 1.7, fontSize: '0.95rem' }}>
                     "{testimonial.review}"
                   </Typography>
-                  
+
                   {/* Keeping name and rating but left-aligned for context */}
                   <Rating value={testimonial.rating} readOnly size="small" sx={{ mb: 1 }} />
                   <Typography variant="subtitle2" fontWeight="bold" color="primary.main">
@@ -321,9 +321,9 @@ const Home = () => {
       </Container>
 
       {/* Checkout Modal & Snackbar */}
-      <Snackbar 
-        open={snackbarOpen} 
-        autoHideDuration={3000} 
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
@@ -335,7 +335,7 @@ const Home = () => {
       {selectedProduct && (
         <Checkout product={selectedProduct} onClose={() => setSelectedProduct(null)} />
       )}
-      
+
       {/* Global styles for animation */}
       <style>
         {`

@@ -7,7 +7,8 @@ export const DUMMY_PRODUCTS = [
     image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=500&q=80',
     company: 'Nivea',
     category: 'Face Wash',
-    rating: 4.5
+    rating: 4.5,
+    stock: 2 // Low Stock
   },
   {
     id: 2,
@@ -17,7 +18,8 @@ export const DUMMY_PRODUCTS = [
     image: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?w=500&q=80',
     company: "Nature's Secret",
     category: 'Moisturizer',
-    rating: 4.8
+    rating: 4.8,
+    stock: 4 // Low Stock
   },
   {
     id: 3,
@@ -27,7 +29,8 @@ export const DUMMY_PRODUCTS = [
     image: 'https://images.unsplash.com/photo-1535585209827-a15fcdbc4c2d?w=500&q=80',
     company: 'Bellos',
     category: 'Shampoo',
-    rating: 4.2
+    rating: 4.2,
+    stock: 0 // Out of Stock
   },
   {
     id: 4,
