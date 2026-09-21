@@ -44,6 +44,47 @@ const ProductCard = ({ product, onBuyNow }) => {
           },
         }}
       >
+        {/* Out of Stock or Low Stock Label */}
+        {product.stock === 0 ? (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 12,
+              left: 12,
+              bgcolor: '#d32f2f',
+              color: 'white',
+              px: 1,
+              py: 0.5,
+              borderRadius: 1,
+              fontSize: '11px',
+              fontWeight: 'bold',
+              zIndex: 1,
+              textTransform: 'uppercase'
+            }}
+          >
+            Out of Stock
+          </Box>
+        ) : (product.stock > 0 && product.stock <= 5) ? (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 12,
+              left: 12,
+              bgcolor: '#ff9800',
+              color: 'white',
+              px: 1,
+              py: 0.5,
+              borderRadius: 1,
+              fontSize: '11px',
+              fontWeight: 'bold',
+              zIndex: 1,
+              textTransform: 'uppercase'
+            }}
+          >
+            Low Stock
+          </Box>
+        ) : null}
+
         {/* Product Image */}
         <Box
           component="img"
@@ -63,6 +104,7 @@ const ProductCard = ({ product, onBuyNow }) => {
         {/* Floating Add to Cart — appears on hover */}
         <IconButton
           className="buy-button"
+          disabled={product.stock === 0}
           onClick={(e) => {
             e.stopPropagation();
             addToCart(product);
@@ -89,14 +131,30 @@ const ProductCard = ({ product, onBuyNow }) => {
           <ShoppingCartIcon sx={{ color: '#333', fontSize: 18 }} />
         </IconButton>
 
+        {/* Product Category */}
+        <Typography
+          sx={{
+            position: 'absolute',
+            top: 198,
+            left: 14,
+            color: '#888',
+            fontSize: '11px',
+            textTransform: 'uppercase',
+            fontWeight: 'bold',
+            letterSpacing: '0.5px'
+          }}
+        >
+          {product.category || 'Category'}
+        </Typography>
+
         {/* Product Name */}
         <Typography
           sx={{
             position: 'absolute',
-            top: 210,
+            top: 215,
             left: 14,
             width: 217,
-            height: 40,
+            height: 36,
             color: '#333',
             fontWeight: 'bold',
             lineHeight: 1.2,
@@ -164,6 +222,7 @@ const ProductCard = ({ product, onBuyNow }) => {
           className="buy-now-bar"
           variant="contained"
           color="primary"
+          disabled={product.stock === 0}
           onClick={(e) => {
             e.stopPropagation();
             onBuyNow(product);

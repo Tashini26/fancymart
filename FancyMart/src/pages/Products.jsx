@@ -1,8 +1,17 @@
 import React, { useState, useMemo, useEffect } from 'react';
+<<<<<<< HEAD
 import { 
   Container, 
   Typography, 
   Box, 
+=======
+import {
+  Container,
+  Typography,
+  Box,
+  Snackbar,
+  Alert,
+>>>>>>> origin/Ta-shini
   FormGroup,
   FormControlLabel,
   Checkbox,
@@ -25,7 +34,7 @@ import Checkout from './Checkout';
 import { DUMMY_PRODUCTS, BRANDS, CATEGORIES } from '../data/products';
 
 /* ── Collapsible filter section — organized card style ── */
-const SidebarFilterGroup = ({ title, icon, options = [], selected = [], onChange = () => {}, defaultExpanded = false, children }) => {
+const SidebarFilterGroup = ({ title, icon, options = [], selected = [], onChange = () => { }, defaultExpanded = false, children }) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
 
   return (
@@ -129,7 +138,7 @@ const FilterContent = ({ minRating, setMinRating, selectedBrands, handleBrandTog
     <SidebarFilterGroup title="⭐ Top Rating" defaultExpanded={true}>
       <RadioGroup value={minRating} onChange={(e) => setMinRating(Number(e.target.value))}>
         {[
-          { value: 0,   label: 'Any Rating' },
+          { value: 0, label: 'Any Rating' },
           { value: 4.0, label: '4.0 & up' },
           { value: 4.5, label: '4.5 & up' },
         ].map(({ value, label }) => (
@@ -246,17 +255,36 @@ const Products = () => {
 
   return (
     <Box className="animate-fade-in">
-      
+
       {/* Hero Section */}
-      <Box sx={{ 
-        display: 'flex', 
-        mb: 6, 
-        backgroundImage: `url(${heroImage})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        minHeight: { xs: '220px', md: '350px' }
-      }}>
-        <Box sx={{ p: { xs: 3, md: 6, lg: 8 }, display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: '800px' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          mb: 6,
+          backgroundImage: `url(${heroImage})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          minHeight: { xs: '300px', md: '550px' },
+          borderRadius: { xs: 0, md: '0 0 32px 32px' },
+          overflow: 'hidden',
+          position: 'relative',
+        }}
+      >
+        {/* Overlay for text readability */}
+        <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, bgcolor: 'rgba(255, 255, 255, 0.4)' }} />
+
+        <Box
+          sx={{
+            p: { xs: 3, md: 6, lg: 8 },
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: { xs: 'center', md: 'flex-start' },
+            textAlign: { xs: 'center', md: 'left' },
+            maxWidth: '800px',
+            zIndex: 1
+          }}
+        >
           <Typography variant="h3" component="h1" fontWeight="bold" sx={{ color: '#134e2c', lineHeight: 1.2, fontSize: { xs: '1.6rem', md: '3rem' } }}>
             Purity. Power.<br />Personalization.
           </Typography>
@@ -273,7 +301,7 @@ const Products = () => {
       <Container maxWidth="xl" sx={{ mb: 8 }}>
 
         {/* ── Search Bar ── */}
-        <Box sx={{ mb: 4, px: { xs: 2, sm: 0 }, display: 'flex', justifyContent: 'center' }}>
+        <Box sx={{ mb: 6, px: { xs: 2, sm: 0 }, display: 'flex', justifyContent: 'center' }}>
           <Autocomplete
             freeSolo
             options={DUMMY_PRODUCTS.map((option) => option.name)}
@@ -281,7 +309,7 @@ const Products = () => {
             onInputChange={(event, newInputValue) => {
               setSearchTerm(newInputValue);
             }}
-            sx={{ maxWidth: '600px', width: '100%' }}
+            sx={{ maxWidth: '800px', width: '100%' }}
             renderInput={(params) => (
               <TextField
                 {...params}
@@ -289,19 +317,24 @@ const Products = () => {
                 placeholder="Search products..."
                 sx={{
                   bgcolor: 'white',
-                  borderRadius: '30px',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+                  borderRadius: '40px',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
                   '& .MuiOutlinedInput-root': {
-                    borderRadius: '30px',
-                    paddingLeft: '20px',
+                    borderRadius: '40px',
+                    paddingLeft: '24px',
+                    fontSize: '1.1rem',
+                    minHeight: '60px',
                     '& fieldset': {
-                      borderColor: 'transparent',
+                      borderColor: '#d1d1d1',
+                      borderWidth: '1.5px',
                     },
                     '&:hover fieldset': {
                       borderColor: '#00c853',
+                      borderWidth: '2px',
                     },
                     '&.Mui-focused fieldset': {
                       borderColor: '#00c853',
+                      borderWidth: '2px',
                     },
                   },
                 }}
@@ -324,7 +357,7 @@ const Products = () => {
             display: { xs: 'flex', md: 'none' },
             justifyContent: 'flex-start',   // anchors to LEFT corner
             mb: '20px',
-            mt:"-30px"
+            mt: "-30px"
           }}
         >
           <Box
@@ -529,14 +562,14 @@ const Products = () => {
             {/* Pagination Controls */}
             {filteredProducts.length > itemsPerPage && (
               <Box sx={{ display: 'flex', justifyContent: 'center', mt: 6, mb: 2 }}>
-                <Pagination 
-                  count={Math.ceil(filteredProducts.length / itemsPerPage)} 
-                  page={page} 
+                <Pagination
+                  count={Math.ceil(filteredProducts.length / itemsPerPage)}
+                  page={page}
                   onChange={(e, value) => {
                     setPage(value);
                     window.scrollTo({ top: 350, behavior: 'smooth' }); // Scroll to top of products smoothly
-                  }} 
-                  color="primary" 
+                  }}
+                  color="primary"
                   size="large"
                 />
               </Box>
@@ -546,6 +579,21 @@ const Products = () => {
         </Box>
       </Container>
 
+<<<<<<< HEAD
+=======
+      {/* Toast */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%', fontWeight: 'bold' }}>
+          {selectedProduct?.name} added to cart!
+        </Alert>
+      </Snackbar>
+
+>>>>>>> origin/Ta-shini
       {selectedProduct && (
         <Checkout product={selectedProduct} onClose={() => setSelectedProduct(null)} />
       )}

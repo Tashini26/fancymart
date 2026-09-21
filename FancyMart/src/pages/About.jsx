@@ -164,12 +164,13 @@ const About = () => {
               </Slider>
             </Box>
           ) : (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px', mt: 6 }}>
+            <Box sx={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'center', gap: '20px', mt: 6 }}>
               {values.map((value, index) => (
                 <Card 
                   key={index}
                   sx={{ 
-                    width: '295px',
+                    flex: 1,
+                    minWidth: 0,
                     height: '359px',
                     border: 'none', 
                     boxShadow: '0 4px 24px rgba(0,0,0,0.06)', 

@@ -148,23 +148,59 @@ const ProductDetailModal = ({ open, onClose, product }) => {
             flexDirection: 'column',
           }}
         >
-          {/* In Stock Badge */}
-          <Box
-            sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 110,
-              height: 28,
-              borderRadius: '5px',
-              bgcolor: 'rgba(0, 192, 96, 0.12)',
-              mb: '14px',
-            }}
-          >
-            <Typography sx={{ color: '#00C060', fontWeight: 700, fontSize: '12px' }}>
-              ✓ In Stock
-            </Typography>
-          </Box>
+          {/* Stock Badge */}
+          {product.stock === 0 ? (
+            <Box
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 120,
+                height: 28,
+                borderRadius: '5px',
+                bgcolor: 'rgba(211, 47, 47, 0.12)',
+                mb: '14px',
+              }}
+            >
+              <Typography sx={{ color: '#d32f2f', fontWeight: 700, fontSize: '12px' }}>
+                ✕ Out of Stock
+              </Typography>
+            </Box>
+          ) : (product.stock > 0 && product.stock <= 5) ? (
+            <Box
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 120,
+                height: 28,
+                borderRadius: '5px',
+                bgcolor: 'rgba(255, 152, 0, 0.12)',
+                mb: '14px',
+              }}
+            >
+              <Typography sx={{ color: '#ff9800', fontWeight: 700, fontSize: '12px' }}>
+                ! Low Stock
+              </Typography>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 120,
+                height: 28,
+                borderRadius: '5px',
+                bgcolor: 'rgba(0, 192, 96, 0.12)',
+                mb: '14px',
+              }}
+            >
+              <Typography sx={{ color: '#00C060', fontWeight: 700, fontSize: '12px' }}>
+                ✓ In Stock
+              </Typography>
+            </Box>
+          )}
 
           {/* Product Name */}
           <Typography
@@ -318,6 +354,7 @@ const ProductDetailModal = ({ open, onClose, product }) => {
               variant="contained"
               startIcon={<FlashOn />}
               onClick={handleBuyNow}
+              disabled={product.stock === 0}
               fullWidth              // fills right column, no fixed px
               sx={{
                 height: 46,
@@ -336,6 +373,7 @@ const ProductDetailModal = ({ open, onClose, product }) => {
               variant="outlined"
               startIcon={<ShoppingCartOutlined />}
               onClick={handleAddToCart}
+              disabled={product.stock === 0}
               fullWidth              // fills right column, no fixed px
               sx={{
                 height: 40,
