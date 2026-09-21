@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Box,
   Container,
@@ -11,7 +11,9 @@ import {
   Avatar,
   Rating,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  Snackbar,
+  Alert
 } from '@mui/material';
 import SliderLib from "react-slick";
 const Slider = SliderLib.default ? SliderLib.default : SliderLib;
@@ -19,7 +21,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { DUMMY_PRODUCTS, BRANDS } from '../data/products';
 import ProductCard from '../components/ProductCard';
-import Checkout from './Checkout';
+import { CartContext } from '../context/CartContext';
 import heroImage from '../assets/Product/hro.webp';
 
 // Testimonial Data (using placeholders)
@@ -32,6 +34,11 @@ const TESTIMONIALS = [
 const Home = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const navigate = useNavigate();
+  const { addToCart } = useContext(CartContext);
+
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [lastAddedProduct, setLastAddedProduct] = React.useState(null);
 
   const sliderSettings = {
     dots: true,
@@ -48,10 +55,17 @@ const Home = () => {
     cssEase: "ease-in-out"
   };
 
-  const [selectedProduct, setSelectedProduct] = useState(null);
-
   const handleBuyNow = (product) => {
-    setSelectedProduct(product);
+    addToCart(product);
+    setLastAddedProduct(product);
+    setSnackbarOpen(true);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
   };
 
   // Derive products from dummy data
@@ -112,14 +126,11 @@ const Home = () => {
         </Box>
       </Box>
 
-      {/* Brand Marquee moved below Top Rated */}
-
       {/* Top Selling Products */}
       <Container maxWidth="lg" sx={{ mb: 10 }}>
         <Typography variant="h3" align="center" fontWeight="bold" gutterBottom sx={{ mb: 6 }}>
           Top Selling
         </Typography>
-        {/* We use flex-wrap here similar to Products.jsx to center cards securely */}
         <Box
           sx={{
             display: 'flex',
@@ -313,9 +324,7 @@ const Home = () => {
         )}
       </Container>
 
-<<<<<<< HEAD
-=======
-      {/* Checkout Modal & Snackbar */}
+      {/* Snackbar for Cart Add */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
@@ -323,14 +332,9 @@ const Home = () => {
         anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       >
         <Alert onClose={handleCloseSnackbar} severity="success" sx={{ width: '100%', fontWeight: 'bold' }}>
-          {selectedProduct?.name} added to cart!
+          {lastAddedProduct?.name} added to cart!
         </Alert>
       </Snackbar>
-
->>>>>>> origin/Ta-shini
-      {selectedProduct && (
-        <Checkout product={selectedProduct} onClose={() => setSelectedProduct(null)} />
-      )}
 
       {/* Global styles for animation */}
       <style>
