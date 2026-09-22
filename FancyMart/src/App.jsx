@@ -14,10 +14,13 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Footer from './components/Footer';
 import TopToScroll from './components/TopToScroll';
+import Chatbot from './components/Chatbot';
+import WhatsAppButton from './components/WhatsAppButton';
 import './index.css';
 
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { Stack } from '@mui/material';
 import theme from './theme';
 
 function AppLayout() {
@@ -41,7 +44,21 @@ function AppLayout() {
         </Routes>
       </main>
       {!hideFooter && <Footer />}
-      <TopToScroll />
+      <Stack 
+        direction="column" 
+        spacing={2} 
+        sx={{ 
+          position: 'fixed', 
+          bottom: { xs: 20, md: 30 }, 
+          right: { xs: 20, md: 30 }, 
+          zIndex: 9999,
+          alignItems: 'center'
+        }}
+      >
+        <WhatsAppButton />
+        <Chatbot />
+        <TopToScroll />
+      </Stack>
     </div>
   );
 }

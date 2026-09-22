@@ -21,17 +21,14 @@ const TopToScroll = () => {
   }, []);
 
   return (
-    <Zoom in={isVisible}>
+    <Zoom in={isVisible} unmountOnExit>
       <Fab
         color="primary"
-        size="medium"
         onClick={scrollToTop}
         aria-label="scroll back to top"
         sx={{
-          position: 'fixed',
-          bottom: { xs: 20, md: 30 },
-          right: { xs: 20, md: 30 },
-          zIndex: 1000,
+          width: { xs: 48, md: 56 },
+          height: { xs: 48, md: 56 },
           boxShadow: '0 4px 12px rgba(107,33,168,0.3)',
           '&:hover': {
             transform: 'scale(1.05)',
@@ -39,7 +36,7 @@ const TopToScroll = () => {
           },
         }}
       >
-        <KeyboardArrowUpIcon />
+        <KeyboardArrowUpIcon sx={{ fontSize: { xs: '1.5rem', md: '2rem' } }} />
       </Fab>
     </Zoom>
   );
