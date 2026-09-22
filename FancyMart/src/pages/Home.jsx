@@ -19,6 +19,12 @@ import SliderLib from "react-slick";
 const Slider = SliderLib.default ? SliderLib.default : SliderLib;
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { 
+  VerifiedUser as QualityIcon, 
+  LocalShipping as ShippingIcon, 
+  SupportAgent as SupportIcon,
+  Recycling as EcoIcon 
+} from '@mui/icons-material';
 import { DUMMY_PRODUCTS, BRANDS } from '../data/products';
 import ProductCard from '../components/ProductCard';
 import { CartContext } from '../context/CartContext';
@@ -39,6 +45,29 @@ const Home = () => {
 
   const [snackbarOpen, setSnackbarOpen] = React.useState(false);
   const [lastAddedProduct, setLastAddedProduct] = React.useState(null);
+
+  const values = [
+    {
+      icon: <QualityIcon fontSize="large" color="primary" />,
+      title: "Premium Quality",
+      description: "We source only the finest materials and partner with trusted brands to ensure every product meets our strict quality standards."
+    },
+    {
+      icon: <ShippingIcon fontSize="large" color="primary" />,
+      title: "Fast & Reliable",
+      description: "Experience seamless shopping with our expedited shipping options and reliable global delivery network."
+    },
+    {
+      icon: <SupportIcon fontSize="large" color="primary" />,
+      title: "24/7 Support",
+      description: "Our dedicated customer success team is available around the clock to assist you with any questions or concerns."
+    },
+    {
+      icon: <EcoIcon fontSize="large" color="primary" />,
+      title: "Sustainable Focus",
+      description: "We are committed to reducing our carbon footprint by utilizing eco-friendly packaging and supporting sustainable brands."
+    }
+  ];
 
   const sliderSettings = {
     dots: true,
@@ -124,6 +153,123 @@ const Home = () => {
             </Button>
           </Box>
         </Box>
+      </Box>
+
+      {/* Values Section */}
+      <Box sx={{ bgcolor: '#f8f9fa', py: { xs: 8, md: 8 }, mb: 10 }}>
+        <Container maxWidth="xl" sx={{ px: { xs: 2, md: 4 } }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', mb: 8 }}>
+            <Typography variant="h3" fontWeight="bold" align="center" sx={{ color: 'primary.main' }}>
+              Why Choose Us
+            </Typography>
+            <Typography variant="h6" color="text.secondary" align="center" sx={{ mt: 3, fontWeight: 400 }}>
+              The pillars that hold up the FancyMart experience.
+            </Typography>
+          </Box>
+          
+          {isMobile ? (
+            <Box sx={{ 
+              maxWidth: '320px', 
+              mx: 'auto', 
+              mt: 6,
+              mb: 4,
+              '.slick-dots': { bottom: '-45px' },
+              '.slick-dots li button:before': { fontSize: '14px', color: '#9e9e9e', opacity: 0.7, transition: 'all 0.3s' },
+              '.slick-dots li.slick-active button:before': { color: 'primary.main', opacity: 1, transform: 'scale(1.2)' },
+              '.slick-slide > div': { display: 'flex', justifyContent: 'center' }
+            }}>
+              <Slider {...sliderSettings}>
+                {values.map((value, index) => (
+                  <Card 
+                    key={index}
+                    sx={{ 
+                      width: '295px !important',
+                      height: '359px',
+                      border: 'none', 
+                      boxShadow: '0 4px 24px rgba(0,0,0,0.06)', 
+                      borderRadius: '20px', 
+                      display: 'flex !important',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      mx: 'auto'
+                    }}
+                  >
+                    <CardContent sx={{ p: '40px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+                      <Box 
+                        sx={{ 
+                          mb: 3, 
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: '56.69px',
+                          height: '56.69px',
+                          borderRadius: '56.69px', 
+                          bgcolor: 'rgba(0, 200, 83, 0.1)',
+                          padding: '14px',
+                          boxSizing: 'border-box'
+                        }}
+                      >
+                        {value.icon}
+                      </Box>
+                      <Typography variant="h6" fontWeight="bold" gutterBottom sx={{ fontSize: '1.1rem', mb: 2 }}>
+                        {value.title}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7, fontSize: '0.9rem' }}>
+                        {value.description}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                ))}
+              </Slider>
+            </Box>
+          ) : (
+            <Box sx={{ display: 'flex', flexWrap: 'nowrap', justifyContent: 'center', gap: '20px', mt: 6 }}>
+              {values.map((value, index) => (
+                <Card 
+                  key={index}
+                  sx={{ 
+                    flex: 1,
+                    minWidth: 0,
+                    height: '359px',
+                    border: 'none', 
+                    boxShadow: '0 4px 24px rgba(0,0,0,0.06)', 
+                    borderRadius: '20px', 
+                    transition: 'all 0.3s ease', 
+                    '&:hover': { transform: 'translateY(-8px)', boxShadow: '0 12px 30px rgba(0,0,0,0.1)' },
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <CardContent sx={{ p: '40px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '100%' }}>
+                    <Box 
+                      sx={{ 
+                        mb: 3, 
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '56.69px',
+                        height: '56.69px',
+                        borderRadius: '56.69px', 
+                        bgcolor: 'rgba(0, 200, 83, 0.1)',
+                        padding: '14px',
+                        boxSizing: 'border-box'
+                      }}
+                    >
+                      {value.icon}
+                    </Box>
+                    <Typography variant="h6" fontWeight="bold" gutterBottom sx={{ fontSize: '1.1rem', mb: 2 }}>
+                      {value.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.7, fontSize: '0.9rem' }}>
+                      {value.description}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              ))}
+            </Box>
+          )}
+        </Container>
       </Box>
 
       {/* Top Selling Products */}
