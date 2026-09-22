@@ -119,7 +119,7 @@ const Chatbot = () => {
                 <BotIcon />
               </Avatar>
               <Box>
-                <Typography variant="subtitle1" fontWeight="bold" lineHeight={1.2}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', lineHeight: 1.2 }}>
                   FancyBot
                 </Typography>
                 <Typography variant="caption" sx={{ opacity: 0.8, display: 'flex', alignItems: 'center', gap: 0.5 }}>

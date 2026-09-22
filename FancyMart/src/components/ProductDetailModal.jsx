@@ -28,7 +28,7 @@ const ProductDetailModal = ({ open, onClose, product }) => {
   const handleBuyNow = (e) => {
     e.stopPropagation();
     onClose();
-    navigate('/checkout', { state: { product, quantity } });
+    navigate('/checkout', { state: { directBuyProduct: { ...product, quantity } } });
   };
 
   const handleAddToCart = (e) => {

@@ -41,8 +41,8 @@ const CartDrawer = ({ open, onClose }) => {
       anchor="right"
       open={open}
       onClose={onClose}
-      PaperProps={{
-        sx: {
+      sx={{
+        '& .MuiDrawer-paper': {
           width: DRAWER_WIDTH,
           top: '29px',
           height: 'calc(100% - 29px)',
@@ -83,7 +83,7 @@ const CartDrawer = ({ open, onClose }) => {
         /* ── Empty State ────────────────────────────────── */
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 2, px: 3 }}>
           <Typography fontSize="2rem">🛒</Typography>
-          <Typography color="text.secondary" fontSize="0.9rem" textAlign="center">
+          <Typography color="text.secondary" fontSize="0.9rem" sx={{ textAlign: 'center' }}>
             Your cart is empty. Start shopping!
           </Typography>
           <Button

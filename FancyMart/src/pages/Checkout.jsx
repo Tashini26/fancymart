@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import {
   Box, Typography, Button, Container,
   Grid, Divider, TextField, Collapse,
@@ -110,12 +110,19 @@ const FField = ({ label, error, helperText, ...rest }) => (
 
 // ═════════════════════════════════════════════════════════════════════════════
 const Checkout = () => {
-  const { cartItems, cartTotal } = useContext(CartContext);
+  const location = useLocation();
+  const directBuyProduct = location.state?.directBuyProduct;
+  
+  const { cartItems: contextCartItems, cartTotal: contextCartTotal } = useContext(CartContext);
+  
+  const cartItems = directBuyProduct ? [directBuyProduct] : contextCartItems;
+  const cartTotal = directBuyProduct 
+    ? (directBuyProduct.discountPrice || directBuyProduct.price) * directBuyProduct.quantity 
+    : contextCartTotal;
+
   const navigate = useNavigate();
 
-  if (!cartItems || cartItems.length === 0) return <Navigate to="/cart" replace />;
-
-  const itemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const itemCount = cartItems ? cartItems.reduce((acc, item) => acc + item.quantity, 0) : 0;
 
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [slipFile, setSlipFile]           = useState(null);
@@ -125,6 +132,8 @@ const Checkout = () => {
     email: '', address: '', city: '', district: '', saveAsDefault: false,
   });
   const [errors, setErrors] = useState({});
+
+  if (!cartItems || cartItems.length === 0) return <Navigate to="/cart" replace />;
 
   const handleShipChange = (e) => {
     const { name, value, checked, type } = e.target;
@@ -208,12 +217,12 @@ const Checkout = () => {
                 {/* Card fields — Card Number full-width, then Expiry|CVV side-by-side */}
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: '12px', mt: 0.5 }}>
                   <FField label="Card Number" name="number" placeholder="0000 0000 0000 0000"
-                    value={cardDetails.number} onChange={handleCardChange} inputProps={{ maxLength: 19 }} />
+                    value={cardDetails.number} onChange={handleCardChange} slotProps={{ htmlInput: { maxLength: 19 } }} />
                   <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                     <FField label="Expiry" name="expiry" placeholder="MM/YY"
                       value={cardDetails.expiry} onChange={handleCardChange} />
                     <FField label="CVV" name="cvv" placeholder="•••" type="password"
-                      value={cardDetails.cvv} onChange={handleCardChange} inputProps={{ maxLength: 3 }} />
+                      value={cardDetails.cvv} onChange={handleCardChange} slotProps={{ htmlInput: { maxLength: 3 } }} />
                   </Box>
                 </Box>
               </PaymentRow>

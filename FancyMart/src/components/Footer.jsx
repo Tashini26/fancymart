@@ -44,7 +44,7 @@ const Footer = () => {
             <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1.5 }}>
               Quick Links
             </Typography>
-            <Stack spacing={0.8} alignItems={{ xs: 'center', sm: 'flex-start' }}>
+            <Stack spacing={0.8} sx={{ alignItems: { xs: 'center', sm: 'flex-start' } }}>
               <Link
                 component={RouterLink}
                 to="/products"
@@ -80,7 +80,7 @@ const Footer = () => {
             <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1.5 }}>
               Contact Details
             </Typography>
-            <Stack spacing={1.2} sx={{ mb: 2 }} alignItems={{ xs: 'center', sm: 'flex-start' }}>
+            <Stack spacing={1.2} sx={{ mb: 2, alignItems: { xs: 'center', sm: 'flex-start' } }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, opacity: 0.8 }}>
                 <LocationOnIcon fontSize="small" />
                 <Typography variant="body2">123 Fancy Street, NY 10001</Typography>

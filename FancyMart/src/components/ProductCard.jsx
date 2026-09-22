@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, Typography, Box, IconButton, Button } from '@mui/material';
 import { ShoppingCartOutlined as ShoppingCartIcon } from '@mui/icons-material';
 import { CartContext } from '../context/CartContext';
@@ -6,6 +7,7 @@ import ProductDetailModal from './ProductDetailModal';
 
 const ProductCard = ({ product, onBuyNow }) => {
   const { addToCart } = useContext(CartContext);
+  const navigate = useNavigate();
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleCardClick = () => setModalOpen(true);
@@ -206,7 +208,7 @@ const ProductCard = ({ product, onBuyNow }) => {
           disabled={product.stock === 0}
           onClick={(e) => {
             e.stopPropagation();
-            onBuyNow(product);
+            navigate('/checkout', { state: { directBuyProduct: { ...product, quantity: 1 } } });
           }}
           sx={{
             display: { xs: 'none', md: 'inline-flex' },
