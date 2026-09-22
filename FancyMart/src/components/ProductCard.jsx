@@ -64,25 +64,6 @@ const ProductCard = ({ product, onBuyNow }) => {
           >
             Out of Stock
           </Box>
-        ) : (product.stock > 0 && product.stock <= 5) ? (
-          <Box
-            sx={{
-              position: 'absolute',
-              top: 12,
-              left: 12,
-              bgcolor: '#ff9800',
-              color: 'white',
-              px: 1,
-              py: 0.5,
-              borderRadius: 1,
-              fontSize: '11px',
-              fontWeight: 'bold',
-              zIndex: 1,
-              textTransform: 'uppercase'
-            }}
-          >
-            Low Stock
-          </Box>
         ) : null}
 
         {/* Product Image */}

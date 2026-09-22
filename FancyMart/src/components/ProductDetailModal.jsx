@@ -166,23 +166,6 @@ const ProductDetailModal = ({ open, onClose, product }) => {
                 ✕ Out of Stock
               </Typography>
             </Box>
-          ) : (product.stock > 0 && product.stock <= 5) ? (
-            <Box
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 120,
-                height: 28,
-                borderRadius: '5px',
-                bgcolor: 'rgba(255, 152, 0, 0.12)',
-                mb: '14px',
-              }}
-            >
-              <Typography sx={{ color: '#ff9800', fontWeight: 700, fontSize: '12px' }}>
-                ! Low Stock
-              </Typography>
-            </Box>
           ) : (
             <Box
               sx={{
